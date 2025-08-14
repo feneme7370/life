@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Livewire\Subject;
+
+use App\Models\Subject;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Subjects extends Component
+{
+    // paginacion
+    use WithPagination;
+
+    // propiedades para paginacion y orden
+    public $search = '';
+    public $sortField = 'id';
+    public $sortDirection = 'asc';
+    public $perPage = 10;
+
+    // propiedades del item
+    public $subjectId;
+
+    // refrescar paginacion
+    public function updatingSearch(){
+        $this->resetPage();
+    }
+
+    // funcion para ordenar la tabla
+    public function sortBy($field){
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortField = $field;
+    }
+
+    // abrir modal para editar
+    public function edit($uuid){
+        $this->dispatch('subject-edit', $uuid); // llama al modelo de livewire para editar
+    }
+
+    // abrir modal para eliminar
+    public function delete($uuid){
+        $this->subjectId = Subject::where('uuid', $uuid)->first()->id;
+        \Flux\Flux::modal('delete-subject')->show();
+    }
+
+    // eliminar item
+    public function destroy(){
+        Subject::find($this->subjectId)->delete();
+        \Flux\Flux::modal('delete-subject')->close();
+        session()->flash('success', 'Borrado correctamente');
+        $this->redirectRoute('subjects', navigate:true);
+    }
+
+    // render de pagina
+    public function render()
+    {
+        $title = ['singular' => 'sujeto', 'plural' => 'sujetos'];
+
+        $subjects = Subject::select('id', 'name', 'slug', 'country', 'birthdate', 'cover_image_url', 'uuid')            
+            ->where(function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
+                      ->orWhere('slug', 'like', "%{$this->search}%")
+                      ->orWhere('country', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate($this->perPage);
+
+        return view('livewire.subject.subjects', compact(
+            'title',
+            'subjects',
+        ));
+    }
+}
