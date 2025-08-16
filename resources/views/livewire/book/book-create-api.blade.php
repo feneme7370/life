@@ -6,6 +6,8 @@
         <flux:separator variant="subtle" />
     </div>
 
+    <flux:icon.loading class="block w-full" wire:loading.delay />
+
     <flux:separator text="buscar libro desde API" />
     <livewire:book.book-search />
 

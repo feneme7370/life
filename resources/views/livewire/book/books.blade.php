@@ -8,8 +8,11 @@
 
     {{-- boton para abrir modal y crear --}}
     <flux:modal.trigger name="create-book">
-        <flux:button >Nuevo</flux:button>
+        <flux:button size="sm" variant="primary" color="purple" icon="plus">Nuevo</flux:button>
     </flux:modal.trigger>
+
+    
+    <flux:icon.loading class="block w-full" wire:loading.delay />
 
     {{-- modales de crear y editar --}}
     <livewire:book.book-create>
@@ -40,27 +43,33 @@
             <div class="w-full grid gap-1 grid-col-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 @foreach ($books as $item)
                 <section
-                    class="w-full p-1 border border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-900 rounded-md mt-1 flex flex-col justify-between items-start">
+                    class="w-full p-2 border border-purple-200  dark:bg-gray-900 dark:border-gray-900 rounded-md mt-1 flex flex-col justify-between items-start">
 
                     <div class="grid grid-cols-12 gap-3 w-full">
+
                         <img class="h-auto rounded-md object-cover col-span-4" src="{{ $item->cover_image_url }}"
                             alt="Portada">
+
                         <div class="w-full col-span-8">
+
                             <div class="text-sm md:text-base font-semibold hover:underline line-clamp-3">
                                 <a
                                     href="{{ route('book_view', ['uuid' => $item->uuid]) }}"
-                                >{{ $item->title }}</a></div>
+                                >{{ $item->title }}</a>
+                            </div>
+
                             <div class="flex flex-col gap-1">
-                                <span class="text-sm md:font-normal text-gray-500">{{ $item->media_type == null ? '' :
+                                <span class="text-sm md:font-normal text-gray-400">{{ $item->media_type == null ? '' :
                                     $media_type_content[$item->media_type] }} ({{ \Carbon\Carbon::parse($item->release_date)->year
                                     }})</span>
-                                <span class="text-sm md:font-normal text-gray-500">{{ $rating_stars[$item->rating] ??
+                                <span class="text-sm md:font-normal text-gray-400">{{ $rating_stars[$item->rating] ??
                                     'Sin valorar' }}</span>
-                                <span class="text-sm md:font-normal text-gray-500">Pag: {{ $item->pages }}</span>
+                                <span class="text-sm md:font-normal text-gray-400">{{ $item->pages }} Pags.</span>
                             </div>
+
                             <div class="flex gap-1">
                                 @foreach ($item->book_subjects as $item_subject)
-                                <a class="text-xs hover:underline text-gray-500"
+                                <a class="text-xs hover:underline text-gray-400"
                                     href="{{ route('books_library', ['a' => $item_subject->uuid]) }}"
                                 >
                                     {{ $item_subject->name}}
@@ -73,38 +82,39 @@
                     <div class="flex flex-col gap-1 mt-1">
                         <div class="flex gap-1 flex-wrap">
                             @foreach ($item->book_collections as $collection_item)
-                            <a 
-                                href="{{ route('books_library', ['c' => $collection_item->uuid]) }}"
-                                class="hover:underline text-xs md:text-sm text-gray-500 italic bg-gray-200 rounded-md px-1 border border-gray-200"
-                            >
-                                {{$collection_item->name }}
-                            </a>
+                                <flux:badge size="sm" variant="pill" as="button" variant="solid" color="purple">
+                                    <a 
+                                        href="{{ route('books_library', ['c' => $collection_item->uuid]) }}"
+                                    >
+                                        {{$collection_item->name }}
+                                    </a>
+                                </flux:badge>
                             @endforeach
                         </div>
                         <div class="flex gap-1 flex-wrap">
                             @foreach ($item->book_genres as $genre_item)
-                            <span>
-                                <a 
-                                    href="{{ route('books_library', ['g' => $genre_item->uuid]) }}"
-                                    class="bg-gray-900 text-gray-50 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg"
+                                <flux:badge size="sm" variant="pill" as="button" variant="" color="purple">
+                                    <a 
+                                        href="{{ route('books_library', ['g' => $genre_item->uuid]) }}"
                                     >
                                         {{$genre_item->name }}
                                     </a>
-                            </span>
+                                </flux:badge>
                             @endforeach
                         </div>
-                        <div class="flex gap-1 flex-wrap">
+
+                        {{-- <div class="flex gap-1 flex-wrap">
                             @foreach ($item->book_tags as $tag_item)
-                            <span>
-                                <a 
-                                    href="{{ route('books_library', ['t' => $tag_item->uuid]) }}"
-                                    class="bg-gray-900 text-gray-50 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg"
-                                >
-                                    {{$tag_item->name }}
-                                </a>
-                            </span>
+                                <flux:badge size="sm" variant="pill" as="button" variant="" color="purple">
+                                    <a 
+                                        href="{{ route('books_library', ['c' => $tag_item->uuid]) }}"
+                                    >
+                                        {{$tag_item->name }}
+                                    </a>
+                                </flux:badge>
                             @endforeach
-                        </div>
+                        </div> --}}
+                        
                     </div>
 
                     <div class="w-full">
@@ -115,8 +125,8 @@
                                 <span class="text-sm italic">{{ $status_book[$item->status] ?? 'Desconocido' }}</span>
                             </div>
                             <div class="flex items-center justify-center gap-1">
-                                    <flux:button icon="pencil-square" size="sm" wire:click="edit('{{ $item->uuid }}')"></flux:button>
-                                    <flux:button icon="trash" size="sm" variant="danger" wire:click="delete('{{ $item->uuid }}')"></flux:button>
+                                    <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm" wire:click="edit('{{ $item->uuid }}')"></flux:button>
+                                    <flux:button variant="ghost" color="red" icon="trash" size="sm" wire:click="delete('{{ $item->uuid }}')"></flux:button>
                             </div>
                         </div>
                     </div>

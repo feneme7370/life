@@ -6,6 +6,8 @@
         <flux:separator variant="subtle" />
     </div>
 
+    <flux:icon.loading class="block w-full" wire:loading.delay />
+
     <div class="p-4">
         {{-- buscar item --}}
         <input type="text" wire:model.debounce.500ms.live="search"

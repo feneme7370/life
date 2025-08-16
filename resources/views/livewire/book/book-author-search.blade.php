@@ -7,13 +7,14 @@
             placeholder="Buscar autor..."
             class="border p-2 rounded w-full"
         >
-        <button wire:click="search" class="bg-blue-500 text-white px-4 py-2 rounded">
-            Buscar
-        </button>
+        <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click="search">Buscar</flux:button>
+
     </div>
 
+    <flux:icon.loading class="block w-full" wire:loading.delay />
+
     @if (!empty($this->authors))
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             @forelse ($this->authors as $author)
 
                 <div class="border p-4 rounded shadow">
@@ -36,7 +37,7 @@
                         @endif
                     </div>
                     
-                    <flux:button icon="plus" size="sm"  wire:click="generate_autor('{{ json_encode($author) }}')">Crear</flux:button>
+                    <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click="generate_autor('{{ json_encode($author) }}')">Crear</flux:button>
                 </div>
 
             @empty

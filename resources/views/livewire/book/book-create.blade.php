@@ -6,6 +6,8 @@
                 <flux:text class="mt-2">Agregar libro.</flux:text>
             </div>
 
+            <flux:icon.loading class="block w-full" wire:loading.delay />
+
             <flux:text class="text-xs italic">Datos del libro</flux:text>
             
             <flux:input wire:model='title' label="Titulo" placeholder="Titulo del libro" />
@@ -121,7 +123,7 @@
             <div class="flex">
                 <flux:spacer />
 
-                <flux:button wire:click='save' type="submit" variant="primary">Guardar</flux:button>
+                <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click='save' type="submit">Guardar</flux:button>
             </div>
         </div>
     </flux:modal>

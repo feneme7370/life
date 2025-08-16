@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Quote;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
@@ -57,15 +58,21 @@ class Book extends Model
     }
 
     // tiene muchos collections para relacionarse
-    public function book_collections()    {
+    public function book_collections(){
         return $this->belongsToMany(Collection::class, 'book_collection')
                     ->withTimestamps();
     }
 
     // tiene muchos genres para relacionarse
-    public function book_genres()    {
+    public function book_genres(){
         return $this->belongsToMany(Genre::class, 'book_genre')
                     ->withTimestamps();
+    }
+
+    // Book.php
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class);
     }
 
     // valoraciones en estrellas para cada libro

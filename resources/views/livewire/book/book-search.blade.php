@@ -7,10 +7,10 @@
             placeholder="Buscar libro..."
             class="border p-2 rounded w-full"
         >
-        <button wire:click="search" class="bg-blue-500 text-white px-4 py-2 rounded">
-            Buscar
-        </button>
+        <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click="search">Buscar</flux:button>
     </div>
+
+    <flux:icon.loading class="block w-full" wire:loading.delay />
 
     @if(!empty($results))
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -33,7 +33,7 @@
                         <p class="mt-2 text-gray-500 italic line-clamp-3"><strong>Sinopsis:</strong> {!! $book['description'] ?: 'N/A' !!}</p>
                     </div>
                     
-                    <flux:button icon="plus" size="sm"  wire:click="generate('{{ json_encode($book) }}')">Crear</flux:button>
+                    <flux:button  size="sm" variant="primary" color="purple" icon="plus" wire:click="generate('{{ json_encode($book) }}')">Crear</flux:button>
                 </div>
 
             @empty
