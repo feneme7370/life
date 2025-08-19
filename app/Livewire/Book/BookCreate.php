@@ -17,14 +17,7 @@ class BookCreate extends Component
     public 
     $title, 
     $slug, 
-    $original_title, 
-
-    // $start_date, 
-    // $end_date, 
-    // $start_date_two, 
-    // $end_date_two, 
-    // $start_date_three, 
-    // $end_date_three, 
+    $original_title,
 
     $synopsis, 
     $release_date, 
@@ -35,11 +28,11 @@ class BookCreate extends Component
     $notes, 
     $is_favorite,
 
+    $category = 0, 
     $rating = 0, 
     $format = 2, 
     $media_type = 1, 
     $status = 3, 
-
 
     $cover_image, 
     $cover_image_url, 
@@ -49,6 +42,7 @@ class BookCreate extends Component
 
     // relaciones con el modelo
     public 
+    $category_book,
     $media_type_content,
     $status_book,
     $rating_stars,
@@ -73,13 +67,6 @@ class BookCreate extends Component
             'slug' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('books', 'slug')->ignore($this->book?->id ?? 0)],
             'original_title' => ['nullable', 'string', 'max:255'],
             
-            // 'start_date' => ['nullable', 'date'],
-            // 'end_date' => ['nullable', 'date'],
-            // 'start_date_two' => ['nullable', 'date'],
-            // 'end_date_two' => ['nullable', 'date'],
-            // 'start_date_three' => ['nullable', 'date'],
-            // 'end_date_three' => ['nullable', 'date'],
-            
             'synopsis' => ['nullable', 'string'],
             'release_date' => ['nullable', 'date'],
             'number_collection' => ['nullable', 'integer', 'min:1'],
@@ -89,6 +76,7 @@ class BookCreate extends Component
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
             
+            'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'format' => ['nullable', 'numeric', 'min:1'],
             'media_type' => ['nullable', 'numeric', 'min:1'],
@@ -107,13 +95,6 @@ class BookCreate extends Component
         'title' => 'titulo',
         'slug' => 'slug',
         'original_title' => 'titulo original',
-
-        // 'start_date' => 'fecha de inicio',
-        // 'end_date' => 'fecha de fin',
-        // 'start_date_two' => 'fecha de inicio 2°',
-        // 'end_date_two' => 'fecha de fin 2°',
-        // 'start_date_three' => 'fecha de inicio 3°',
-        // 'end_date_three' => 'fecha de fin 3°',
         
         'synopsis' => 'sinopsis',
         'release_date' => 'publicacion',
@@ -124,6 +105,7 @@ class BookCreate extends Component
         'notes' => 'notas',
         'is_favorite' => 'favorito',
         
+        'category' => 'categoria',
         'rating' => 'valoracion',
         'format' => 'formato',
         'media_type' => 'tipo de medio',
@@ -149,18 +131,6 @@ class BookCreate extends Component
     //     \Flux\Flux::modal('create-book')->show();
     // }
 
-    // traer datos a crear desde API
-    // public function mount(){
-    //     dd($book_api);
-    //     if($book_api){
-    //         // $book_api = json_decode($book_api);
-    //         $this->title = $book_api['title'] ?? null;
-    //         $this->release_date = $book_api['published_date'] ?? null;
-    //         $this->pages = $book_api['pages'] ?? null;
-    //         $this->cover_image_url = $book_api['thumbnail'] ?? null;
-    //         $this->synopsis = $book_api['description'] ?? null;
-    //     }
-    // }
 
     // funcion para crear item
     public function save(){
@@ -187,9 +157,6 @@ class BookCreate extends Component
         // resetear propiedades
         $this->reset();
 
-        // cerrar modal
-        // \Flux\Flux::modal('create-book')->close();
-
         // mensaje de success
         session()->flash('success', 'Creado correctamente');
 
@@ -205,6 +172,7 @@ class BookCreate extends Component
         $this->status_book = Book::status_book();
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
+        $this->category_book = Book::category_book();
 
         // relaciones con otras tablas
         $this->subjects = Subject::where('user_id', Auth::user()->id)->orderBy('name', 'ASC')->get();

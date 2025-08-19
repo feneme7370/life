@@ -15,13 +15,12 @@
             class="border-b px-3 py-1 mb-3 w-full sm:w-1/3">
 
         {{-- cuadricula --}}
-        <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-            <div class="grid grid-cols-3 md:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-10 gap-1">
+        <div class="relative shadow-md sm:rounded-lg">
+            <div class="flex flex-wrap justify-center gap-2">
                 <!-- Aquí repetir el card anterior para cada libro -->
                 
                 @foreach ($books as $item)
                 <a 
-                    class="mx-auto" 
                     href="{{ route('book_view', ['uuid' => $item->uuid]) }}"
                 >
                     <div class="relative w-20 h-32 sm:w-40 sm:h-60 rounded-lg overflow-hidden shadow-lg group">

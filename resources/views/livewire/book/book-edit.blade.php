@@ -16,7 +16,11 @@
             <div class="grid gap-1 grid-cols-3">
                 <flux:input wire:model='release_date' type="date" max="2999-12-31" label="Publicacion" />
                 <flux:input wire:model='pages' label="Paginas" placeholder="Cantidad" />
-                <flux:input wire:model='number_collection' label="Numero de coleccion" placeholder="Numero" />
+                <flux:select wire:model="category" label="Categoria" placeholder="Seleccionar...">
+                    @foreach ($category_book as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </flux:select>
             </div>
             
             <flux:input wire:model='cover_image_url' label="Link de Imagen" placeholder="Coloque el enlace de la imagen" />
@@ -46,6 +50,8 @@
             </div>
 
             <div class="col-span-12 sm:col-span-6">
+                <flux:input class="col-span-8"  wire:model='number_collection' label="Numero de coleccion" placeholder="Numero" />
+
                 <x-pages.forms.select-multiple
                     model="collection" 
                     relation="book_collection" 
@@ -74,23 +80,6 @@
                     :items="$genres"
                 />
             </div>
-
-            {{-- <flux:text class="text-xs italic">Fechas de lectura</flux:text>
-            
-            <div class="grid grid-cols-2 gap-1">
-                <flux:input wire:model='start_date' type="date" max="2999-12-31" label="Inicio de lectura" />
-                <flux:input wire:model='end_date' type="date" max="2999-12-31" label="Fin de lectura" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-1">
-                <flux:input wire:model='start_date_two' type="date" max="2999-12-31" label="Inicio de 2° lectura" />
-                <flux:input wire:model='end_date_two' type="date" max="2999-12-31" label="Fin de 2° lectura" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-1">
-                <flux:input wire:model='start_date_three' type="date" max="2999-12-31" label="Inicio de 3° lectura" />
-                <flux:input wire:model='end_date_three' type="date" max="2999-12-31" label="Fin de 3° lectura" />
-            </div> --}}
 
             <flux:text class="text-xs italic">Personal</flux:text>
 

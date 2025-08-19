@@ -28,10 +28,12 @@ class Book extends Model
         'notes',
         'is_favorite',
         
+        'categoty',
         'rating',
         'format',
         'media_type',
         'status',       
+        'language',
 
         'cover_image',
         'cover_image_url',
@@ -77,6 +79,31 @@ class Book extends Model
     // tiene muchas lecturas
     public function reads(){
         return $this->hasMany(BookRead::class);
+    }
+
+    // valoraciones en estrellas para cada libro
+    public static function language_book(){
+        return [
+            0 => '🇪🇸 Español', 
+            1 => '🇬🇧 Inglés', 
+            2 => '🇮🇹 Italiano', 
+            3 => '🇨🇳 Chino',
+            4 => '🇫🇷 Francés',
+            5 => '🇩🇪 Alemán',
+            6 => '🇵🇹 Portugués',
+            7 => '🇯🇵 Japonés',
+            8 => '🌍 Otros', // cuando un libro tiene varias ediciones
+        ];
+    }
+
+    // valoraciones en estrellas para cada libro
+    public static function category_book(){
+        return [
+            0 => '📖 Biblioteca de Sabiduria', 
+            1 => '✒️ Ficcion e Historias', 
+            2 => '👤 Biografia', 
+            3 => '📚 General', 
+        ];
     }
 
     // valoraciones en estrellas para cada libro

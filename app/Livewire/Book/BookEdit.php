@@ -22,13 +22,6 @@ class BookEdit extends Component
     $slug, 
     $original_title, 
 
-    // $start_date, 
-    // $end_date, 
-    // $start_date_two, 
-    // $end_date_two, 
-    // $start_date_three, 
-    // $end_date_three, 
-
     $synopsis, 
     $release_date, 
     $number_collection, 
@@ -38,6 +31,7 @@ class BookEdit extends Component
     $notes, 
     $is_favorite,
 
+    $category = 0, 
     $rating, 
     $format, 
     $media_type, 
@@ -53,6 +47,7 @@ class BookEdit extends Component
 
     // relaciones con el modelo
     public 
+    $category_book,
     $media_type_content,
     $status_book,
     $rating_stars,
@@ -73,13 +68,6 @@ class BookEdit extends Component
             'slug' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('books', 'slug')->ignore($this->book?->id ?? 0)],
             'original_title' => ['nullable', 'string', 'max:255'],
             
-            // 'start_date' => ['nullable', 'date'],
-            // 'end_date' => ['nullable', 'date'],
-            // 'start_date_two' => ['nullable', 'date'],
-            // 'end_date_two' => ['nullable', 'date'],
-            // 'start_date_three' => ['nullable', 'date'],
-            // 'end_date_three' => ['nullable', 'date'],
-            
             'synopsis' => ['nullable', 'string'],
             'release_date' => ['nullable', 'date'],
             'number_collection' => ['nullable', 'integer', 'min:1'],
@@ -89,6 +77,7 @@ class BookEdit extends Component
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
             
+            'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'format' => ['nullable', 'numeric', 'min:1'],
             'media_type' => ['nullable', 'numeric', 'min:1'],
@@ -107,13 +96,6 @@ class BookEdit extends Component
         'title' => 'titulo',
         'slug' => 'slug',
         'original_title' => 'titulo original',
-
-        // 'start_date' => 'fecha de inicio',
-        // 'end_date' => 'fecha de fin',
-        // 'start_date_two' => 'fecha de inicio 2°',
-        // 'end_date_two' => 'fecha de fin 2°',
-        // 'start_date_three' => 'fecha de inicio 3°',
-        // 'end_date_three' => 'fecha de fin 3°',
         
         'synopsis' => 'sinopsis',
         'release_date' => 'publicacion',
@@ -124,6 +106,7 @@ class BookEdit extends Component
         'notes' => 'notas',
         'is_favorite' => 'favorito',
         
+        'category' => 'categoria',
         'rating' => 'valoracion',
         'format' => 'formato',
         'media_type' => 'tipo de medio',
@@ -144,13 +127,6 @@ class BookEdit extends Component
         
         $this->title = $this->book->title; 
         $this->original_title = $this->book->original_title; 
-        
-        // $this->start_date = $this->book->start_date; 
-        // $this->end_date = $this->book->end_date; 
-        // $this->start_date_two = $this->book->start_date_two; 
-        // $this->end_date_two = $this->book->end_date_two; 
-        // $this->start_date_three = $this->book->start_date_three; 
-        // $this->end_date_three = $this->book->end_date_three; 
 
         $this->synopsis = $this->book->synopsis; 
         $this->release_date = $this->book->release_date; 
@@ -161,6 +137,7 @@ class BookEdit extends Component
         $this->notes = $this->book->notes; 
         $this->is_favorite = $this->book->is_favorite ? true : false; 
         
+        $this->category = $this->book->category; 
         $this->rating = $this->book->rating; 
         $this->format = $this->book->format; 
         $this->media_type = $this->book->media_type; 
@@ -203,9 +180,6 @@ class BookEdit extends Component
         // resetear propiedades
         $this->reset();
 
-        // cerrar modal
-        // \Flux\Flux::modal('edit-book')->close();
-
         // mensaje de success
         session()->flash('success', 'Editado correctamente');
 
@@ -221,6 +195,7 @@ class BookEdit extends Component
         $this->status_book = Book::status_book();
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
+        $this->category_book = Book::category_book();
 
         // relaciones con otras tablas
         $this->subjects = Subject::where('user_id', Auth::user()->id)->orderBy('name', 'ASC')->get();
