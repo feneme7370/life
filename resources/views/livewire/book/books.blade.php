@@ -7,17 +7,16 @@
     </div>
 
     {{-- boton para abrir modal y crear --}}
-    <flux:modal.trigger name="create-book">
-        <flux:button size="sm" variant="primary" color="purple" icon="plus">Nuevo</flux:button>
-    </flux:modal.trigger>
+    {{-- <flux:modal.trigger name="create-book"> --}}
+        <a href="{{ route('book_create') }}">
+            <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Nuevo</flux:button>
+        </a>
+    {{-- </flux:modal.trigger> --}}
 
     
     <flux:icon.loading class="block w-full" wire:loading.delay />
 
-    {{-- modales de crear y editar --}}
-    <livewire:book.book-create>
-    <livewire:subject.subject-create>
-    <livewire:book.book-edit>
+    {{-- <livewire:subject.subject-create> --}}
 
     {{-- mensaje de success --}}
     @session('success')
@@ -125,8 +124,12 @@
                                 <span class="text-sm italic">{{ $status_book[$item->status] ?? 'Desconocido' }}</span>
                             </div>
                             <div class="flex items-center justify-center gap-1">
-                                    <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm" wire:click="edit('{{ $item->uuid }}')"></flux:button>
-                                    <flux:button variant="ghost" color="red" icon="trash" size="sm" wire:click="delete('{{ $item->uuid }}')"></flux:button>
+                                    
+                                <a href="{{ route('book_edit', ['uuid' => $item->uuid]) }}">
+                                    <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm"></flux:button>
+                                </a>
+                                
+                                <flux:button variant="ghost" color="red" icon="trash" size="sm" wire:click="delete('{{ $item->uuid }}')"></flux:button>
                             </div>
                         </div>
                     </div>

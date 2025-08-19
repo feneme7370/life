@@ -36,9 +36,9 @@ class Books extends Component
     }
 
     // abrir modal para editar
-    public function edit($uuid){
-        $this->dispatch('book-edit', $uuid); // llama al modelo de livewire para editar
-    }
+    // public function edit($uuid){
+    //     $this->dispatch('book-edit', $uuid); // llama al modelo de livewire para editar
+    // }
 
     // abrir modal para eliminar
     public function delete($uuid){

@@ -55,7 +55,8 @@ class BookSearch extends Component
     // abrir modal para editar
     public function generate($book){
         $book = json_decode($book);
-        $this->dispatch('book-create', $book); // llama al modelo de livewire para editar
+        $this->redirectRoute('book_create', $book, navigate:true);
+        // $this->dispatch('book-create', $book); // llama al modelo de livewire para editar
     }
 
 

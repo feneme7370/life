@@ -16,6 +16,6 @@
 
 
     {{-- modales de crear y editar --}}
-    <livewire:book.book-create>
+    {{-- <livewire:book.book-create> --}}
     <livewire:subject.subject-create>
 </div>

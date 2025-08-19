@@ -57,8 +57,15 @@ class BookLibrary extends Component
         $format_book = Book::format_book();
 
         $books = Book::where(function ($query) {
-                $query->where('title', 'like', "%{$this->search}%")
-                      ->orWhere('slug', 'like', "%{$this->search}%");
+                        $query
+                        ->where('title', 'like', "%{$this->search}%")
+                        ->orWhere('slug', 'like', "%{$this->search}%")
+                        ->orWhereHas('book_subjects', function ($q) {
+                            $q->where('name', 'like', "%{$this->search}%");
+                        })
+                        ->orWhereHas('book_collections', function ($q) {
+                            $q->where('name', 'like', "%{$this->search}%");
+                        });
             })
                         ->when($this->status_read, function( $query) {
                             return $query->where('status', $this->status_read);

@@ -21,7 +21,8 @@
                 <flux:navlist.group :heading="__('Modulos')" class="grid">
                     <flux:navlist.item icon="book-open" :href="route('books')" :current="request()->routeIs('books')" wire:navigate>{{ __('Libros') }}</flux:navlist.item>
                     <flux:navlist.item icon="book-open" :href="route('books_library')" :current="request()->routeIs('books_library')" wire:navigate>{{ __('Libreria') }}</flux:navlist.item>
-                    <flux:navlist.item icon="book-open" :href="route('book_create_api')" :current="request()->routeIs('book_create_api')" wire:navigate>{{ __('Libros API') }}</flux:navlist.item>
+                    <flux:navlist.item icon="book-open" :href="route('books_history')" :current="request()->routeIs('books_history')" wire:navigate>{{ __('Historial') }}</flux:navlist.item>
+                    {{-- <flux:navlist.item icon="book-open" :href="route('book_create_api')" :current="request()->routeIs('book_create_api')" wire:navigate>{{ __('Libros API') }}</flux:navlist.item> --}}
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -149,5 +150,8 @@
         {{ $slot }}
 
         @fluxScripts
+
+        @stack('modals')
+        @stack('scripts')
     </body>
 </html>

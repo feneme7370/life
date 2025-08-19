@@ -16,7 +16,7 @@
 
         {{-- cuadricula --}}
         <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-            <div class="grid grid-cols-3 md:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-10 gap-4">
+            <div class="grid grid-cols-3 md:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-10 gap-1">
                 <!-- Aquí repetir el card anterior para cada libro -->
                 
                 @foreach ($books as $item)

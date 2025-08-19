@@ -19,12 +19,12 @@ class BookCreate extends Component
     $slug, 
     $original_title, 
 
-    $start_date, 
-    $end_date, 
-    $start_date_two, 
-    $end_date_two, 
-    $start_date_three, 
-    $end_date_three, 
+    // $start_date, 
+    // $end_date, 
+    // $start_date_two, 
+    // $end_date_two, 
+    // $start_date_three, 
+    // $end_date_three, 
 
     $synopsis, 
     $release_date, 
@@ -65,6 +65,7 @@ class BookCreate extends Component
     public $selected_book_subjects = [];
     public $selected_book_collections = [];
 
+    public $book_api = '';
     // reglas de validacion
     protected function rules(){
         return [
@@ -72,12 +73,12 @@ class BookCreate extends Component
             'slug' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('books', 'slug')->ignore($this->book?->id ?? 0)],
             'original_title' => ['nullable', 'string', 'max:255'],
             
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date'],
-            'start_date_two' => ['nullable', 'date'],
-            'end_date_two' => ['nullable', 'date'],
-            'start_date_three' => ['nullable', 'date'],
-            'end_date_three' => ['nullable', 'date'],
+            // 'start_date' => ['nullable', 'date'],
+            // 'end_date' => ['nullable', 'date'],
+            // 'start_date_two' => ['nullable', 'date'],
+            // 'end_date_two' => ['nullable', 'date'],
+            // 'start_date_three' => ['nullable', 'date'],
+            // 'end_date_three' => ['nullable', 'date'],
             
             'synopsis' => ['nullable', 'string'],
             'release_date' => ['nullable', 'date'],
@@ -107,12 +108,12 @@ class BookCreate extends Component
         'slug' => 'slug',
         'original_title' => 'titulo original',
 
-        'start_date' => 'fecha de inicio',
-        'end_date' => 'fecha de fin',
-        'start_date_two' => 'fecha de inicio 2°',
-        'end_date_two' => 'fecha de fin 2°',
-        'start_date_three' => 'fecha de inicio 3°',
-        'end_date_three' => 'fecha de fin 3°',
+        // 'start_date' => 'fecha de inicio',
+        // 'end_date' => 'fecha de fin',
+        // 'start_date_two' => 'fecha de inicio 2°',
+        // 'end_date_two' => 'fecha de fin 2°',
+        // 'start_date_three' => 'fecha de inicio 3°',
+        // 'end_date_three' => 'fecha de fin 3°',
         
         'synopsis' => 'sinopsis',
         'release_date' => 'publicacion',
@@ -136,17 +137,30 @@ class BookCreate extends Component
     ];
 
     // recibe llamada al componente y activa la funcion generate de api
-    #[On('book-create')]
-    public function generate($book){
+    // #[On('book-create')]
+    // public function generate($book){
 
-        $this->title = $book['title'] ?? null;
-        $this->release_date = $book['published_date'] ?? null;
-        $this->pages = $book['pages'] ?? null;
-        $this->cover_image_url = $book['thumbnail'] ?? null;
-        $this->synopsis = $book['description'] ?? null;
+    //     $this->title = $book['title'] ?? null;
+    //     $this->release_date = $book['published_date'] ?? null;
+    //     $this->pages = $book['pages'] ?? null;
+    //     $this->cover_image_url = $book['thumbnail'] ?? null;
+    //     $this->synopsis = $book['description'] ?? null;
         
-        \Flux\Flux::modal('create-book')->show();
-    }
+    //     \Flux\Flux::modal('create-book')->show();
+    // }
+
+    // traer datos a crear desde API
+    // public function mount(){
+    //     dd($book_api);
+    //     if($book_api){
+    //         // $book_api = json_decode($book_api);
+    //         $this->title = $book_api['title'] ?? null;
+    //         $this->release_date = $book_api['published_date'] ?? null;
+    //         $this->pages = $book_api['pages'] ?? null;
+    //         $this->cover_image_url = $book_api['thumbnail'] ?? null;
+    //         $this->synopsis = $book_api['description'] ?? null;
+    //     }
+    // }
 
     // funcion para crear item
     public function save(){
@@ -174,7 +188,7 @@ class BookCreate extends Component
         $this->reset();
 
         // cerrar modal
-        \Flux\Flux::modal('create-book')->close();
+        // \Flux\Flux::modal('create-book')->close();
 
         // mensaje de success
         session()->flash('success', 'Creado correctamente');

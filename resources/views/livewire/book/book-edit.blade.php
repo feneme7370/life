@@ -1,5 +1,4 @@
 <div>
-    <flux:modal name="edit-book" class="w-full">
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">Editar Libro</flux:heading>
@@ -76,7 +75,7 @@
                 />
             </div>
 
-            <flux:text class="text-xs italic">Fechas de lectura</flux:text>
+            {{-- <flux:text class="text-xs italic">Fechas de lectura</flux:text>
             
             <div class="grid grid-cols-2 gap-1">
                 <flux:input wire:model='start_date' type="date" max="2999-12-31" label="Inicio de lectura" />
@@ -91,12 +90,28 @@
             <div class="grid grid-cols-2 gap-1">
                 <flux:input wire:model='start_date_three' type="date" max="2999-12-31" label="Inicio de 3° lectura" />
                 <flux:input wire:model='end_date_three' type="date" max="2999-12-31" label="Fin de 3° lectura" />
-            </div>
+            </div> --}}
 
             <flux:text class="text-xs italic">Personal</flux:text>
 
-            <flux:textarea wire:model='summary' label="Resumen personal" placeholder="Coloque un resumen" resize="vertical"/>
-            <flux:textarea wire:model='notes' label="Notas" placeholder="Coloque las notas" resize="vertical"/>
+            {{-- <flux:textarea wire:model='summary' label="Resumen personal" placeholder="Coloque un resumen" resize="vertical"/> --}}
+            {{-- <flux:textarea wire:model='notes' label="Notas" placeholder="Coloque las notas" resize="vertical"/> --}}
+
+            <x-pages.forms.quill-textarea-form 
+            id_quill="editor_create_summary" 
+            name="summary"
+            rows="15" 
+            placeholder="{{ __('Resumen personal') }}" model="summary"
+            model_data="{{ $summary }}" 
+            />
+            
+            <x-pages.forms.quill-textarea-form 
+                id_quill="editor_create_notes" 
+                name="notes"
+                rows="15" 
+                placeholder="{{ __('Notas personal') }}" model="notes"
+                model_data="{{ $notes }}" 
+            />
 
             <flux:field variant="inline">
                 <flux:checkbox wire:model="is_favorite" />
@@ -126,5 +141,4 @@
                 <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click='update' type="submit">Actualizar</flux:button>
             </div>
         </div>
-    </flux:modal>
 </div>

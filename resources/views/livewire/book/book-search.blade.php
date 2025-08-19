@@ -33,7 +33,10 @@
                         <p class="mt-2 text-gray-500 italic line-clamp-3"><strong>Sinopsis:</strong> {!! $book['description'] ?: 'N/A' !!}</p>
                     </div>
                     
-                    <flux:button  size="sm" variant="primary" color="purple" icon="plus" wire:click="generate('{{ json_encode($book) }}')">Crear</flux:button>
+                    <a href="{{ route('book_create', ['book_api' => $book]) }}">
+                        <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Nuevo</flux:button>
+                    </a>
+                    {{-- <flux:button  size="sm" variant="primary" color="purple" icon="plus" wire:click="generate('{{ json_encode($book) }}')">Crear</flux:button> --}}
                 </div>
 
             @empty

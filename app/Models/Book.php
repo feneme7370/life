@@ -69,10 +69,14 @@ class Book extends Model
                     ->withTimestamps();
     }
 
-    // Book.php
-    public function quotes()
-    {
+    // tiene muchas notas
+    public function quotes(){
         return $this->hasMany(Quote::class);
+    }
+
+    // tiene muchas lecturas
+    public function reads(){
+        return $this->hasMany(BookRead::class);
     }
 
     // valoraciones en estrellas para cada libro

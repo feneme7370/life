@@ -8,7 +8,7 @@
 
     <flux:icon.loading class="block w-full" wire:loading.delay />
     
-    <livewire:book.book-edit>
+    {{-- <livewire:book.book-edit :summary="$book->summary" :notes="$book->notes"> --}}
 
     {{-- mensaje de success --}}
     @session('success')
@@ -27,23 +27,6 @@
 
     <div class="sm:m-3 p-4 bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-900 rounded-lg shadow-sm sm:p-8">
 
-        {{-- <div class="flex items-center justify-between mb-4 ">
-            <div class="flex items-center gap-1">
-                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-gray-300">Libro</h5>
-            </div>
-            @if (session('status'))
-                <div class="alert alert-success text-sm font-bold leading-none text-red-900 ">
-                    {{ session('status') }}
-                </div>
-            @endif</h5>
-            <div>
-                
-                <a href="{{ route('books_library') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline ">
-                    Volver
-                </a>
-            </div>
-       </div> --}}
-
        <div class="grid grid-cols-1 gap-1">
            <img src="{{ $book->cover_image_url }}" class="w-full sm:w-auto sm:h-96 mx-auto mb-1 sm:mb-5" alt="">
    
@@ -53,7 +36,11 @@
                        <h5 class="text-xl sm:text-lg font-bold text-gray-950 dark:text-gray-200 ">{{ $book->title }}</h5>
                        <p class="mb-2 text-xs sm:text-sm text-gray-800 dark:text-gray-300  font-light italic">{{ $book->original_title }}</p>
                    </div>
-                   <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm" wire:click="edit('{{ $book->uuid }}')"></flux:button>
+
+                    <a href="{{ route('book_edit', ['uuid' => $book->uuid]) }}">
+                        <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm"></flux:button>
+                    </a>
+
                </div>
                
                <flux:separator text="Datos" />
@@ -149,11 +136,26 @@
         </div>
         @endif
 
-        @if ($book->end_date)
+        <div class="flex gap-2 items-center">
+
+            <flux:button wire:click="modalRead" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button>
             <flux:separator text="Lecturas" />
+            
+        </div>
+
+        @if ($book->reads)
+            @foreach ($book->reads as $read)
+            <div class="flex items-start justify-between">
+                <div class="px-3 border-l-4 border-purple-800">
+                    <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300 ">{{ $read->start_read }} - {{ $read->end_read }} en {{ \Carbon\Carbon::parse($read->start_read)->diffInDays($read->end_read) }} dias</p>
+                </div>
+
+                <flux:button wire:click="deleteRead({{ $read->id }})" class="ml-3 text-gray-400 hover:text-red-500 transition" size="sm" variant="ghost" color="purple" type="submit">✕</flux:button>
+            </div>
+            @endforeach
         @endif
 
-        @if ($book->end_date)
+        {{-- @if ($book->end_date)
         <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300  italic">1° Lectura</p>
                 <div class="px-3 border-l-4 border-purple-800">
                     <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300 ">{{ $book->start_date }} - {{ $book->end_date }} en {{ \Carbon\Carbon::parse($book->start_date)->diffInDays($book->end_date) }} dias</p>
@@ -172,7 +174,7 @@
                 <div class="px-3 border-l-4 border-purple-800">
                     <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300 ">{{ $book->start_date_three }} - {{ $book->end_date_three }} en {{ \Carbon\Carbon::parse($book->start_date_three)->diffInDays($book->end_date_three) }} dias</p>
                 </div>
-        @endif
+        @endif --}}
 
         <flux:separator text="Anotaciones Personales" />
 
@@ -208,10 +210,8 @@
         @endif
 
         <div class="flex gap-2 items-center">
-            {{-- <flux:modal.trigger name="add-quotes"> --}}
-                <flux:button wire:click="modalQuote" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button>
-            {{-- </flux:modal.trigger> --}}
 
+            <flux:button wire:click="modalQuote" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button>
             <flux:separator text="Citas" />
             
         </div>
@@ -235,7 +235,58 @@
         
 
 
-<flux:modal name="add-quotes" class="md:w-96">
+{{-- modales para agrear y eliminar lecturas --}}
+<flux:modal name="add-read" class="md:w-96">
+    <div class="space-y-6">
+        <div>
+            <flux:heading size="lg">Lectura</flux:heading>
+            <flux:text class="mt-2">Agregue una fecha de lectura.</flux:text>
+        </div>
+
+        {{-- <flux:textarea wire:model='quoteContent' row="20" label="Cita o Frase" placeholder="Coloque la la cita o frase" resize="vertical"/> --}}
+        <div class="grid grid-cols-2 gap-1">
+            <flux:input wire:model='start_read' type="date" max="2999-12-31" label="Inicio de lectura" />
+            <flux:input wire:model='end_read' type="date" max="2999-12-31" label="Fin de lectura" />
+        </div>
+
+        <div class="flex gap-2">
+            <flux:spacer />
+
+            <flux:modal.close>
+                <flux:button variant="ghost">Cancelar</flux:button>
+            </flux:modal.close>
+
+            <flux:button wire:click="addRead" type="submit" variant="primary">Agregar</flux:button>
+        </div>
+    </div>
+</flux:modal>
+
+
+<flux:modal name="delete-read" class="min-w-[22rem]">
+    <div class="space-y-6">
+        <div>
+            <flux:heading size="lg">Eliminar</flux:heading>
+
+            <flux:text class="mt-2">
+                <p>Desea eliminar esta lectura?.</p>
+                <p>Esta accion no puede revertirse.</p>
+            </flux:text>
+        </div>
+
+        <div class="flex gap-2">
+            <flux:spacer />
+
+            <flux:modal.close>
+                <flux:button variant="ghost">Cancelar</flux:button>
+            </flux:modal.close>
+
+            <flux:button wire:click="destroyRead" type="submit" variant="danger">Borrar</flux:button>
+        </div>
+    </div>
+</flux:modal>
+
+{{-- modales para agrear y eliminar notas --}}
+<flux:modal name="add-quote" class="md:w-96">
     <div class="space-y-6">
         <div>
             <flux:heading size="lg">Citas</flux:heading>
