@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Livewire\Book;
+namespace App\Livewire\Diary;
 
-use App\Models\Book;
+use App\Models\Diary\Diary;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Books extends Component
+class Diaries extends Component
 {
     // paginacion
     use WithPagination;
 
     // propiedades para paginacion y orden
     public $search = '';
-    public $sortField = 'id';
-    public $sortDirection = 'asc';
+    public $sortField = 'day';
+    public $sortDirection = 'desc';
     public $perPage = 30;
 
     // propiedades del item
-    public $bookId;
+    public $diaryId;
 
     // refrescar paginacion
     public function updatingSearch(){$this->resetPage();}
@@ -37,51 +37,43 @@ class Books extends Component
     }
 
     // abrir modal para editar
-    // public function edit($uuid){
-    //     $this->dispatch('book-edit', $uuid); // llama al modelo de livewire para editar
-    // }
+    public function edit($uuid){
+        $this->dispatch('diary-edit', $uuid); // llama al modelo de livewire para editar
+    }
 
     // abrir modal para eliminar
     public function delete($uuid){
-        $this->bookId = Book::where('uuid', $uuid)->first()->id;
-
-        \Flux\Flux::modal('delete-book')->show();
+        $this->diaryId = Diary::where('uuid', $uuid)->first()->id;
+        \Flux\Flux::modal('delete-diary')->show();
     }
 
     // eliminar item
     public function destroy(){
-        Book::find($this->bookId)->delete();
-        \Flux\Flux::modal('delete-book')->close();
+        Diary::find($this->diaryId)->delete();
+        \Flux\Flux::modal('delete-diary')->close();
         session()->flash('success', 'Borrado correctamente');
-        $this->redirectRoute('books', navigate:true);
+        $this->redirectRoute('diaries', navigate:true);
     }
 
     // render de pagina
     public function render()
     {
-        $title = ['singular' => 'libro', 'plural' => 'libros'];
+        $title = ['singular' => 'diario', 'plural' => 'diarios'];
 
-        // relaciones con el modelo
-        $media_type_content = Book::media_type_content();
-        $status_book = Book::status_book();
-        $rating_stars = Book::rating_stars();
-        $format_book = Book::format_book();
-
-        $books = Book::where(function ($query) {
+        $diaries = Diary::where(function ($query) {
                 $query->where('title', 'like', "%{$this->search}%")
-                      ->orWhere('slug', 'like', "%{$this->search}%");
+                      ->orWhere('content', 'like', "%{$this->search}%")
+                      ->orWhere('day', 'like', "%{$this->search}%");
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.book.books', compact(
-            'title',
-            'books',
+        $humor_status = Diary::humor_status();
 
-            'media_type_content',
-            'status_book',
-            'rating_stars',
-            'format_book',
+        return view('livewire.diary.diaries', compact(
+            'title',
+            'diaries',
+            'humor_status',
         ));
     }
 }

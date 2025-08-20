@@ -8,6 +8,10 @@ use App\Livewire\Book\BookLibrary;
 use App\Livewire\Book\Books;
 use App\Livewire\Book\BookView;
 use App\Livewire\Collection\Collections;
+use App\Livewire\Diary\Diaries;
+use App\Livewire\Diary\DiaryCreate;
+use App\Livewire\Diary\DiaryEdit;
+use App\Livewire\Diary\DiaryView;
 use App\Livewire\Genre\Genres;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Subject\Subjects;
@@ -27,6 +31,7 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
+    // Seccion Libros
     Route::get('libros', Books::class)->name('books');
     Route::get('libro/{uuid}', BookView::class)->name('book_view');
     Route::get('libro', BookCreate::class)->name('book_create');
@@ -34,12 +39,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('libreria', BookLibrary::class)->name('books_library');
     Route::get('libros_historial', BookHistory::class)->name('books_history');
     Route::get('libros_api', BookCreateApi::class)->name('book_create_api');
+
+    // seccion diario
+    Route::get('diarios', Diaries::class)->name('diaries');
+    Route::get('diario', DiaryCreate::class)->name('diary_create');
+    Route::get('diario/{uuid}', DiaryView::class)->name('diary_view');
+    Route::get('diario/{uuid}/edit', DiaryEdit::class)->name('diary_edit');
     
+    // Seccion de asociaciones
     Route::get('sujetos', Subjects::class)->name('subjects');
     Route::get('generos', Genres::class)->name('genres');
     Route::get('etiquetas', Tags::class)->name('tags');
     Route::get('colecciones', Collections::class)->name('collections');
 
+    // Configuracion del perfil
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');

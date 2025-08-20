@@ -9,10 +9,27 @@
     <flux:icon.loading class="block w-full" wire:loading.delay />
 
     <div class="p-4">
-        {{-- buscar item --}}
-        <input type="text" wire:model.debounce.500ms.live="search"
-            placeholder="Buscar..."
-            class="border-b px-3 py-1 mb-3 w-full sm:w-1/3">
+        <div class="grid grid-cols-12 gap-1">
+            {{-- buscar item --}}
+            <input type="text" wire:model.debounce.500ms.live="search"
+                placeholder="Buscar..."
+                class="border-b px-3 py-1 mb-3 w-full col-span-4">
+
+            <span class="col-span-7"></span>
+
+            <flux:dropdown>
+                <flux:button class="col-span-1 text-center" icon:trailing="chevron-down">Ver</flux:button>
+
+                <flux:menu>
+                    <flux:menu.radio.group wire:model.debounce.500ms.live="perPage">
+                        <flux:menu.radio checked>30</flux:menu.radio>
+                        <flux:menu.radio>50</flux:menu.radio>
+                        <flux:menu.radio>100</flux:menu.radio>
+                        <flux:menu.radio>500</flux:menu.radio>
+                    </flux:menu.radio.group>
+                </flux:menu>
+            </flux:dropdown>
+        </div>
 
         {{-- cuadricula --}}
         <div class="relative shadow-md sm:rounded-lg">
@@ -36,9 +53,6 @@
                 
             </div>
             
-            {{-- Paginacion --}}
-            <div class="mt-2 py-1 px-3">{{ $books->onEachSide(1)->links() }}</div>
-            {{-- end Paginacion --}}
         </div>
 
         {{-- paginacion --}}

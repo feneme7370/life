@@ -12,8 +12,6 @@ class BookView extends Component
 {
     ///////////////////////////// MODULO VARIABLES /////////////////////////////
     public $book;
-    // public $summary;
-    // public $notes;
 
     // relaciones con el modelo
     public 
@@ -31,7 +29,6 @@ class BookView extends Component
     public $readId;
     public $start_read;
     public $end_read;
-    // public $quotePage;
 
     public function mount($uuid){
         $this->book = Book::where('uuid', $uuid)->with('book_tags')->first();

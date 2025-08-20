@@ -1,4 +1,4 @@
-@props(['id_quill' => '','model' => '','model_data' => 'notes', 'placeholder' => 'Descripcion','disabled' => false])
+@props(['id_quill' => '','model' => '','model_data' => '', 'placeholder' => 'Descripcion','disabled' => false])
 
 <div class="col-span-12" wire:ignore {!! $attributes->merge(['class' => '
     resize-none 

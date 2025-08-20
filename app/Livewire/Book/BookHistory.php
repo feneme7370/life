@@ -16,7 +16,7 @@ class BookHistory extends Component
     public $search = '';
     public $sortField = 'end_read';
     public $sortDirection = 'desc';
-    public $perPage = 20;
+    public $perPage = 30;
     public $status_read = "", $collection_selected, $subject_selected, $tag_selected, $genre_selected;
 
     // propiedades del item
@@ -35,9 +35,10 @@ class BookHistory extends Component
     }
 
     // refrescar paginacion
-    public function updatingSearch(){
-        $this->resetPage();
-    }
+    public function updatingSearch(){$this->resetPage();}
+    public function updatingSortField(){$this->resetPage();}
+    public function updatingSortDirection(){$this->resetPage();}
+    public function updatingPerPage(){$this->resetPage();}
 
     // funcion para ordenar la tabla
     public function sortBy($field){
@@ -72,9 +73,19 @@ class BookHistory extends Component
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
+        $books_to_reads = Book::with('reads')
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate($this->perPage);
+
+        $books_to_comments = Book::with('reads')
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate($this->perPage);
+
         return view('livewire.book.book-history', compact(
             'title',
             'reads',
+            'books_to_reads',
+            'books_to_comments',
 
             'media_type_content',
             'status_book',

@@ -18,6 +18,12 @@
             </flux:navlist>
 
             <flux:navlist variant="outline">
+                <flux:navlist.group :heading="__('Diario')" class="grid">
+                    <flux:navlist.item icon="calendar-days" :href="route('diaries')" :current="request()->routeIs('diaries')" wire:navigate>{{ __('Diario') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+
+            <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Modulos')" class="grid">
                     <flux:navlist.item icon="book-open" :href="route('books')" :current="request()->routeIs('books')" wire:navigate>{{ __('Libros') }}</flux:navlist.item>
                     <flux:navlist.item icon="book-open" :href="route('books_library')" :current="request()->routeIs('books_library')" wire:navigate>{{ __('Libreria') }}</flux:navlist.item>

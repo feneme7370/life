@@ -32,10 +32,27 @@
     @endsession
 
     <div class="p-4">
-        {{-- buscar item --}}
-        <input type="text" wire:model.debounce.500ms.live="search"
-            placeholder="Buscar..."
-            class="border-b px-3 py-1 mb-3 w-full sm:w-1/3">
+        <div class="grid grid-cols-12 gap-1">
+            {{-- buscar item --}}
+            <input type="text" wire:model.debounce.500ms.live="search"
+                placeholder="Buscar..."
+                class="border-b px-3 py-1 mb-3 w-full col-span-4">
+
+            <span class="col-span-7"></span>
+
+            <flux:dropdown>
+                <flux:button class="col-span-1 text-center" icon:trailing="chevron-down">Ver</flux:button>
+
+                <flux:menu>
+                    <flux:menu.radio.group wire:model.debounce.500ms.live="perPage">
+                        <flux:menu.radio checked>30</flux:menu.radio>
+                        <flux:menu.radio>50</flux:menu.radio>
+                        <flux:menu.radio>100</flux:menu.radio>
+                        <flux:menu.radio>500</flux:menu.radio>
+                    </flux:menu.radio.group>
+                </flux:menu>
+            </flux:dropdown>
+        </div>
 
         {{-- cuadricula --}}
         <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
@@ -117,11 +134,14 @@
                     </div>
 
                     <div class="w-full">
-
                         <div class="flex justify-between">
-                            <div class=" flex items-center justify-center gap-1">
-                                {{-- <span class="flex w-3 h-3 me-3 bg-gray-500 rounded-full"></span> --}}
-                                <span class="text-sm italic">{{ $status_book[$item->status] ?? 'Desconocido' }}</span>
+                            <div class=" flex items-start justify-center flex-col gap-1">
+                                @if ($item->reads->count())
+                                    <span class="text-sm italic">{{ $status_book[$item->status] ?? 'Desconocido' }}</span>
+                                @endif
+                                @if ($item->notes)
+                                    <span class="text-sm italic">✍️ Comentado</span>
+                                @endif
                             </div>
                             <div class="flex items-center justify-center gap-1">
                                     
@@ -136,58 +156,8 @@
                 </section>
                 @endforeach
             </div>
-            
-            {{-- Paginacion --}}
-            <div class="mt-2 py-1 px-3">{{ $books->onEachSide(1)->links() }}</div>
-            {{-- end Paginacion --}}
-        </div>
 
-        {{-- tabla --}}
-        {{-- <div class="overflow-x-auto">
-            <table class="min-w-full text-sm sm:text-base">
-                <thead class="">
-                    <tr>
-                        @foreach (['cover_image_url' => 'Imagen', 'title' => 'Titulo', 'actions' => 'Acciones'] as $field => $label)
-                            <th class="px-3 py-2 border-b border-gray-300 cursor-pointer font-medium whitespace-nowrap"
-                                wire:click="sortBy('{{ $field }}')">
-                                {{ $label }}
-                                @if ($sortField === $field)
-                                    @if ($sortDirection === 'asc')
-                                        ↑
-                                    @else
-                                        ↓
-                                    @endif
-                                @endif
-                            </th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($books as $book)
-                        <tr class="hover:bg-gray-50 hover:text-gray-800 border-b border-gray-300 text-center">
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <div class="flex gap-1 justify-center items-center">
-                                    <img class="max-w-16 h-20 object-cover rounded"
-                                        src="{{ $book->cover_image_url ?? 'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'}}"
-                                        alt="imagen">
-                                </div>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">{{ $book->title }}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <div class="flex gap-1 justify-center items-center">
-                                    <flux:button icon="pencil-square" size="sm" wire:click="edit('{{ $book->uuid }}')">Editar</flux:button>
-                                    <flux:button icon="trash" size="sm" variant="danger" wire:click="delete('{{ $book->uuid }}')">Borrar</flux:button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-3 py-2 text-center">No hay resultados</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div> --}}
+        </div>
 
         {{-- paginacion --}}
         <div class="mt-3">

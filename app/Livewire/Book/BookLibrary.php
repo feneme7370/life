@@ -15,7 +15,7 @@ class BookLibrary extends Component
     public $search = '';
     public $sortField = 'id';
     public $sortDirection = 'asc';
-    public $perPage = 10;
+    public $perPage = 30;
     public $status_read = "", $collection_selected, $subject_selected, $tag_selected, $genre_selected;
 
     // propiedades del item
@@ -34,9 +34,10 @@ class BookLibrary extends Component
     }
 
     // refrescar paginacion
-    public function updatingSearch(){
-        $this->resetPage();
-    }
+    public function updatingSearch(){$this->resetPage();}
+    public function updatingSortField(){$this->resetPage();}
+    public function updatingSortDirection(){$this->resetPage();}
+    public function updatingPerPage(){$this->resetPage();}
 
     // funcion para ordenar la tabla
     public function sortBy($field){
