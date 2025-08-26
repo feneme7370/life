@@ -61,6 +61,10 @@
         </div>
     </div>
 
+    <a href="{{ route('diary_list_history') }}">
+        <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Listado completo para copiar</flux:button>
+    </a>
+
     {{-- modal para eliminar item --}}
     <flux:modal name="delete-diary" class="min-w-[22rem]">
         <div class="space-y-6">

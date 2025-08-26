@@ -7,7 +7,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 
-class Books extends Component
+
+class BookListHistory extends Component
 {
     // paginacion
     use WithPagination;
@@ -16,10 +17,21 @@ class Books extends Component
     public $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
-    public $perPage = 30;
+    public $perPage = 5000;
 
     // propiedades del item
     public $bookId;
+    
+    // relaciones con el modelo
+    public 
+    $media_type_content,
+    $status_book,
+    $rating_stars,
+    $format_book,
+    $category_book;
+
+    // mostrar elementos al hacer click
+    public $list_all_data = 'ligera';
 
     // refrescar paginacion
     public function updatingSearch(){$this->resetPage();}
@@ -37,53 +49,24 @@ class Books extends Component
         $this->sortField = $field;
     }
 
-    // abrir modal para editar
-    // public function edit($uuid){
-    //     $this->dispatch('book-edit', $uuid); // llama al modelo de livewire para editar
-    // }
-
-    // abrir modal para eliminar
-    public function delete($uuid){
-        $this->bookId = Book::where('uuid', $uuid)->first()->id;
-
-        \Flux\Flux::modal('delete-book')->show();
-    }
-
-    // eliminar item
-    public function destroy(){
-        Book::find($this->bookId)->delete();
-        \Flux\Flux::modal('delete-book')->close();
-        session()->flash('success', 'Borrado correctamente');
-        $this->redirectRoute('books', navigate:true);
-    }
-
-    // render de pagina
     public function render()
     {
         $title = ['singular' => 'libro', 'plural' => 'libros'];
 
         // relaciones con el modelo
-        $media_type_content = Book::media_type_content();
-        $status_book = Book::status_book();
-        $rating_stars = Book::rating_stars();
-        $format_book = Book::format_book();
+        $this->media_type_content = Book::media_type_content();
+        $this->status_book = Book::status_book();
+        $this->rating_stars = Book::rating_stars();
+        $this->format_book = Book::format_book();
+        $this->category_book = Book::category_book();
 
         $books = Book::where('user_id', Auth::id())
-            ->where(function ($query) {
-                $query->where('title', 'like', "%{$this->search}%")
-                      ->orWhere('slug', 'like', "%{$this->search}%");
-            })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.book.books', compact(
+        return view('livewire.book.book-list-history', compact(
             'title',
             'books',
-
-            'media_type_content',
-            'status_book',
-            'rating_stars',
-            'format_book',
         ));
     }
 }

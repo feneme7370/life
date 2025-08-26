@@ -1,24 +1,27 @@
 <?php
 
-use App\Livewire\Book\BookCreate;
-use App\Livewire\Book\BookCreateApi;
-use App\Livewire\Book\BookEdit;
-use App\Livewire\Book\BookHistory;
-use App\Livewire\Book\BookLibrary;
+use App\Livewire\Tag\Tags;
 use App\Livewire\Book\Books;
+use App\Livewire\Genre\Genres;
+use App\Livewire\Book\BookEdit;
 use App\Livewire\Book\BookView;
-use App\Livewire\Collection\Collections;
 use App\Livewire\Diary\Diaries;
-use App\Livewire\Diary\DiaryCreate;
+use App\Livewire\Book\BookCreate;
 use App\Livewire\Diary\DiaryEdit;
 use App\Livewire\Diary\DiaryView;
-use App\Livewire\Genre\Genres;
+use App\Livewire\Book\BookHistory;
+use App\Livewire\Book\BookLibrary;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Subject\Subjects;
+use App\Livewire\Diary\DiaryCreate;
 use App\Livewire\Settings\Password;
+use App\Livewire\Book\BookCreateApi;
 use App\Livewire\Settings\Appearance;
-use App\Livewire\Tag\Tags;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Book\BookListHistory;
+use App\Livewire\Collection\Collections;
+use App\Livewire\Dashboard\DashboardIndex;
+use App\Livewire\Diary\DiaryListHistory;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +33,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
-
+    
     // Seccion Libros
     Route::get('libros', Books::class)->name('books');
     Route::get('libro/{uuid}', BookView::class)->name('book_view');
@@ -39,12 +42,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('libreria', BookLibrary::class)->name('books_library');
     Route::get('libros_historial', BookHistory::class)->name('books_history');
     Route::get('libros_api', BookCreateApi::class)->name('book_create_api');
-
+    Route::get('libros_lista_completa', BookListHistory::class)->name('book_list_history');
+    
     // seccion diario
     Route::get('diarios', Diaries::class)->name('diaries');
     Route::get('diario', DiaryCreate::class)->name('diary_create');
     Route::get('diario/{uuid}', DiaryView::class)->name('diary_view');
     Route::get('diario/{uuid}/edit', DiaryEdit::class)->name('diary_edit');
+    Route::get('diarios_lista_completa', DiaryListHistory::class)->name('diary_list_history');
     
     // Seccion de asociaciones
     Route::get('sujetos', Subjects::class)->name('subjects');

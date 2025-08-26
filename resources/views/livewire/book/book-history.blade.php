@@ -32,7 +32,7 @@
         </div>
 
         {{-- listado --}}
-        <flux:separator text="Ultimos leidos" />
+        <flux:separator text="Ultimos leidos ({{ $reads->count() }})" />
         <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
             <div class="grid grid-cols-1 gap-1 p-1">
                 <!-- Aquí repetir el card anterior para cada libro -->
@@ -122,4 +122,8 @@
         </div>
 
     </div>
+
+    <a href="{{ route('book_list_history') }}">
+        <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Listado completo para copiar</flux:button>
+    </a>
 </div>

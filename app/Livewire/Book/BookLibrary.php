@@ -5,6 +5,7 @@ namespace App\Livewire\Book;
 use App\Models\Book;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class BookLibrary extends Component
 {
@@ -13,8 +14,8 @@ class BookLibrary extends Component
 
     // propiedades para paginacion y orden
     public $search = '';
-    public $sortField = 'id';
-    public $sortDirection = 'asc';
+    public $sortField = 'created_at';
+    public $sortDirection = 'desc';
     public $perPage = 30;
     public $status_read = "", $collection_selected, $subject_selected, $tag_selected, $genre_selected;
 
@@ -57,7 +58,8 @@ class BookLibrary extends Component
         $rating_stars = Book::rating_stars();
         $format_book = Book::format_book();
 
-        $books = Book::where(function ($query) {
+        $books = Book::where('user_id', Auth::id())
+            ->where(function ($query) {
                         $query
                         ->where('title', 'like', "%{$this->search}%")
                         ->orWhere('slug', 'like', "%{$this->search}%")
@@ -68,29 +70,29 @@ class BookLibrary extends Component
                             $q->where('name', 'like', "%{$this->search}%");
                         });
             })
-                        ->when($this->status_read, function( $query) {
-                            return $query->where('status', $this->status_read);
-                        })
-                        ->when($this->tag_selected, function ($query) {
-                            $query->whereHas('book_tags', function ($q) {
-                                $q->where('tags.uuid', $this->tag_selected);
-                            });
-                        })
-                        ->when($this->subject_selected, function ($query) {
-                            $query->whereHas('book_subjects', function ($q) {
-                                $q->where('subjects.uuid', $this->subject_selected);
-                            });
-                        })
-                        ->when($this->genre_selected, function ($query) {
-                            $query->whereHas('book_genres', function ($q) {
-                                $q->where('genres.uuid', $this->genre_selected);
-                            });
-                        })
-                        ->when($this->collection_selected, function ($query) {
-                            $query->whereHas('book_collections', function ($q) {
-                                $q->where('collections.uuid', $this->collection_selected);
-                            });
-                        })
+            ->when($this->status_read, function( $query) {
+                return $query->where('status', $this->status_read);
+            })
+            ->when($this->tag_selected, function ($query) {
+                $query->whereHas('book_tags', function ($q) {
+                    $q->where('tags.uuid', $this->tag_selected);
+                });
+            })
+            ->when($this->subject_selected, function ($query) {
+                $query->whereHas('book_subjects', function ($q) {
+                    $q->where('subjects.uuid', $this->subject_selected);
+                });
+            })
+            ->when($this->genre_selected, function ($query) {
+                $query->whereHas('book_genres', function ($q) {
+                    $q->where('genres.uuid', $this->genre_selected);
+                });
+            })
+            ->when($this->collection_selected, function ($query) {
+                $query->whereHas('book_collections', function ($q) {
+                    $q->where('collections.uuid', $this->collection_selected);
+                });
+            })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
             

@@ -18,3 +18,4 @@
 
 <script src="{{asset('data/libraries/quill/quill.js')}}"></script>
 <link href="{{asset('data/libraries/quill/quill.snow.css')}}" rel="stylesheet">
+{{-- <script src="{{asset('data/libraries/quill/image-resize.min.js')}}"></script> --}}

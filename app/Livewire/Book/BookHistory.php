@@ -3,9 +3,10 @@
 namespace App\Livewire\Book;
 
 use App\Models\Book;
-use App\Models\BookRead;
 use Livewire\Component;
+use App\Models\BookRead;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class BookHistory extends Component
 {
@@ -59,7 +60,8 @@ class BookHistory extends Component
         $rating_stars = Book::rating_stars();
         $format_book = Book::format_book();
 
-        $reads = BookRead::with('book') // para traer el libro asociado
+        $reads = BookRead::where('user_id', Auth::id())
+            ->with('book') // para traer el libro asociado
             ->whereHas('book', function ($q) {
                 $q->where('title', 'like', "%{$this->search}%")
                 ->orWhere('slug', 'like', "%{$this->search}%")

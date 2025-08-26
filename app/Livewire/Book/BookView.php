@@ -18,7 +18,8 @@ class BookView extends Component
     $media_type_content,
     $status_book,
     $rating_stars,
-    $format_book;
+    $format_book,
+    $category_book;
 
     // propiedad para agregar nota
     public $quotes;
@@ -160,6 +161,7 @@ class BookView extends Component
         $this->status_book = Book::status_book();
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
+        $this->category_book = Book::category_book();
 
         return view('livewire.book.book-view', compact(
             'title',

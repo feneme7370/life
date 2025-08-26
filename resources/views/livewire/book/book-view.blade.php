@@ -59,34 +59,41 @@
         
                 <div class="flex gap-2 items-center">
                     
-                    @if ($book->number_collection)
+
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{$book->number_collection}}</span>
                                 ° Volumen 
                         </p>
-                    @endif
+
                     
-                    @if ($book->pages)
+
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
-                            <span class="text-gray-800 dark:text-gray-300  font-bold">{{$book->pages}}</span>
+                            <span class="text-gray-800 dark:text-gray-300  font-bold">{{$book->pages ?? 1}}</span>
                                 Pags.
                         </p>
-                    @endif
 
-                        @if ($book->media_type)
+
+
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $media_type_content[$book->media_type] ?? 'Desconocido' }}</span>
                         </p>
-                    @endif
 
-                    @if ($book->format)
+
+
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $format_book[$book->format] ?? 'Desconocido' }}</span>
                         </p>
-                    @endif
+
+
+
+                        <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
+                            | 
+                            <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $category_book[$book->category] ?? 'Desconocido' }}</span>
+                        </p>
+
                     
                     </div>
 

@@ -28,7 +28,7 @@ class Book extends Model
         'notes',
         'is_favorite',
         
-        'categoty',
+        'category',
         'rating',
         'format',
         'media_type',
@@ -110,11 +110,11 @@ class Book extends Model
     public static function rating_stars(){
         return [
             0 => 'Sin Valoracion', 
-            1 => '⭐', 
-            2 => '⭐⭐', 
-            3 => '⭐⭐⭐', 
-            4 => '⭐⭐⭐⭐', 
-            5 => '⭐⭐⭐⭐⭐'
+            1 => '⭐', // no me gusto ni lo recomiendo
+            2 => '⭐⭐', // no me gusto, pero no es para mi, tal vez si para otro
+            3 => '⭐⭐⭐', // lo lei y me gusto pero no lo recomendaria igualmente
+            4 => '⭐⭐⭐⭐', // me gusto y lo recomendaria a otra persona
+            5 => '⭐⭐⭐⭐⭐' // favorito por algun aspecto
         ];
     }
 
