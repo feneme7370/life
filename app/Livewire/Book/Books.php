@@ -67,6 +67,7 @@ class Books extends Component
         $status_book = Book::status_book();
         $rating_stars = Book::rating_stars();
         $format_book = Book::format_book();
+        $category_book = Book::category_book();
 
         $books = Book::where('user_id', Auth::id())
             ->where(function ($query) {
@@ -84,6 +85,7 @@ class Books extends Component
             'status_book',
             'rating_stars',
             'format_book',
+            'category_book',
         ));
     }
 }

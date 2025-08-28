@@ -36,6 +36,7 @@ class BookEdit extends Component
     $format, 
     $media_type, 
     $status, 
+    $language, 
 
     $cover_image, 
     $cover_image_url, 
@@ -51,6 +52,7 @@ class BookEdit extends Component
     $media_type_content,
     $status_book,
     $rating_stars,
+    $language_book,
     $format_book;
 
     public $subjects, $genres, $tags, $collections;
@@ -77,6 +79,7 @@ class BookEdit extends Component
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
             
+            'language' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'format' => ['nullable', 'numeric', 'min:1'],
@@ -106,6 +109,7 @@ class BookEdit extends Component
         'notes' => 'notas',
         'is_favorite' => 'favorito',
         
+        'language' => 'idioma',
         'category' => 'categoria',
         'rating' => 'valoracion',
         'format' => 'formato',
@@ -137,6 +141,7 @@ class BookEdit extends Component
         $this->notes = $this->book->notes; 
         $this->is_favorite = $this->book->is_favorite ? true : false; 
         
+        $this->language = $this->book->language; 
         $this->category = $this->book->category; 
         $this->rating = $this->book->rating; 
         $this->format = $this->book->format; 
@@ -196,6 +201,7 @@ class BookEdit extends Component
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
         $this->category_book = Book::category_book();
+        $this->language_book = Book::language_book();
 
         // relaciones con otras tablas
         $this->subjects = Subject::where('user_id', Auth::user()->id)->orderBy('name', 'ASC')->get();

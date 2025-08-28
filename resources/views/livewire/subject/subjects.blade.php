@@ -29,10 +29,26 @@
     @endsession
 
     <div class="p-4">
-        {{-- buscar item --}}
-        <input type="text" wire:model.debounce.500ms.live="search"
-            placeholder="Buscar..."
-            class="border-b px-3 py-1 mb-3 w-full sm:w-1/3">
+        <div class="flex justify-between items-center gap-1">
+            {{-- buscar item --}}
+            <input type="text" wire:model.debounce.500ms.live="search"
+                placeholder="Buscar..."
+                class="border-b px-3 py-1 mb-3 w-8/12">
+
+            <flux:dropdown class="px-3 py-1 mb-3 w-3/12 ">
+                <flux:button class="text-xs text-center" icon:trailing="chevron-down">Ver</flux:button>
+
+                <flux:menu>
+                    <flux:menu.radio.group wire:model.debounce.500ms.live="perPage">
+                        <flux:menu.radio checked>30</flux:menu.radio>
+                        <flux:menu.radio>50</flux:menu.radio>
+                        <flux:menu.radio>100</flux:menu.radio>
+                        <flux:menu.radio>500</flux:menu.radio>
+                    </flux:menu.radio.group>
+                </flux:menu>
+            </flux:dropdown>
+
+        </div>
 
         {{-- tabla --}}
         <div class="overflow-x-auto">
@@ -57,20 +73,23 @@
                 <tbody>
                     @forelse ($subjects as $subject)
                         <tr class="hover:bg-gray-50 hover:text-gray-800 border-b border-gray-300 text-center">
-                            <td class="px-3 py-2 whitespace-nowrap">
+                            <td class="px-3 py-1 whitespace-nowrap">
                                 <div class="flex gap-1 justify-center items-center">
-                                    <img class="w-16 h-16 object-cover rounded"
+                                    <img class="w-12 h-12 object-cover rounded"
                                         src="{{ $subject->cover_image_url ?? 'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'}}"
                                         alt="imagen">
                                 </div>
                             </td>
-                            <td class="px-3 py-2 whitespace-nowrap">{{ $subject->name }}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">{{ $subject->country }}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">{{ $subject->birthdate }}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">
+                            <td class="px-3 py-1 whitespace-nowrap">{{ $subject->name }}</td>
+                            <td class="px-3 py-1 whitespace-nowrap">{{ $subject->country }}</td>
+                            <td class="px-3 py-1 whitespace-nowrap">{{ $subject->birthdate }}</td>
+                            <td class="px-3 py-1 whitespace-nowrap">
                                 <div class="flex gap-1 justify-center items-center">
-                                    <flux:button icon="pencil-square" size="sm" wire:click="edit('{{ $subject->uuid }}')">Editar</flux:button>
-                                    <flux:button icon="trash" size="sm" variant="danger" wire:click="delete('{{ $subject->uuid }}')">Borrar</flux:button>
+                                    <a wire:click="edit('{{ $subject->uuid }}')">
+                                        <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm"></flux:button>
+                                    </a>
+                                    
+                                    <flux:button variant="ghost" color="red" icon="trash" size="sm" wire:click="delete('{{ $subject->uuid }}')"></flux:button>
                                 </div>
                             </td>
                         </tr>

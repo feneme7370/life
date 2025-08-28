@@ -8,17 +8,15 @@
 
     <flux:icon.loading class="block w-full" wire:loading.delay />
 
-    <div class="p-4">
-        <div class="grid grid-cols-12 gap-1">
+    <div class="p-1">
+        <div class="flex justify-between items-center gap-1">
             {{-- buscar item --}}
             <input type="text" wire:model.debounce.500ms.live="search"
                 placeholder="Buscar..."
-                class="border-b px-3 py-1 mb-3 w-full col-span-4">
+                class="border-b px-3 py-1 mb-3 w-8/12">
 
-            <span class="col-span-7"></span>
-
-            <flux:dropdown>
-                <flux:button class="col-span-1 text-center" icon:trailing="chevron-down">Ver</flux:button>
+            <flux:dropdown class="px-3 py-1 mb-3 w-3/12 ">
+                <flux:button class="text-xs text-center" icon:trailing="chevron-down">Ver</flux:button>
 
                 <flux:menu>
                     <flux:menu.radio.group wire:model.debounce.500ms.live="perPage">
@@ -29,11 +27,12 @@
                     </flux:menu.radio.group>
                 </flux:menu>
             </flux:dropdown>
+
         </div>
 
         {{-- cuadricula --}}
         <div class="relative shadow-md sm:rounded-lg">
-            <div class="flex flex-wrap justify-center gap-2">
+            <div class="flex flex-wrap justify-center gap-1 px-1 py-3">
                 <!-- Aquí repetir el card anterior para cada libro -->
                 
                 @foreach ($books as $item)

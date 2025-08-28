@@ -17,7 +17,7 @@ class BookLibrary extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $perPage = 30;
-    public $status_read = "", $collection_selected, $subject_selected, $tag_selected, $genre_selected;
+    public $status_read = "", $collection_selected, $subject_selected, $tag_selected, $genre_selected, $star_selected, $language_selected, $category_selected, $format_selected;
 
     // propiedades del item
     public $bookId;
@@ -31,6 +31,10 @@ class BookLibrary extends Component
         'subject_selected' => [ 'as' => 'a' ],
         'tag_selected' => [ 'as' => 't' ],
         'genre_selected' => [ 'as' => 'g' ],
+        'star_selected' => [ 'as' => 'star' ],
+        'language_selected' => [ 'as' => 'language' ],
+        'category_selected' => [ 'as' => 'category' ],
+        'format_selected' => [ 'as' => 'format' ],
         ];
     }
 
@@ -72,6 +76,18 @@ class BookLibrary extends Component
             })
             ->when($this->status_read, function( $query) {
                 return $query->where('status', $this->status_read);
+            })
+            ->when($this->star_selected !== null, function( $query) {
+                return $query->where('rating', $this->star_selected);
+            })
+            ->when($this->language_selected !== null, function( $query) {
+                return $query->where('language', $this->language_selected);
+            })
+            ->when($this->category_selected !== null, function( $query) {
+                return $query->where('category', $this->category_selected);
+            })
+            ->when($this->format_selected !== null, function( $query) {
+                return $query->where('format', $this->format_selected);
             })
             ->when($this->tag_selected, function ($query) {
                 $query->whereHas('book_tags', function ($q) {

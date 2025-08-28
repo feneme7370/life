@@ -34,12 +34,9 @@
                     [{ font: [] }], // Tipo de fuente
                     [{ align: [] }], // Alineación del texto
                     // ["link", "image", "video"], // Enlaces, imágenes y videos
-                    ["link", "image"], // Enlaces, imágenes y videos
+                    ["link"], // Enlaces, imágenes y videos
                     
                 ],
-                ImageResize: {
-                modules: ['Resize', 'DisplaySize', 'Toolbar']
-                }
             }
         });
 

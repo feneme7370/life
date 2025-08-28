@@ -37,7 +37,8 @@
                         <span class="font-bold">| Paginas: </span>{{ $book->pages }}
                         <span class="font-bold"> | </span>{{ $media_type_content[$book->media_type] ?? 'Desconocido' }}
                         <span class="font-bold"> | </span>{{ $format_book[$book->format] ?? 'Desconocido' }}
-                        <span class="font-bold"> | </span>{{ $category_book[$book->category] ?? 'Desconocido' }}</p>
+                        <span class="font-bold"> | </span>{{ $category_book[$book->category] ?? 'Desconocido' }}
+                        <span class="font-bold"> | </span>{{ $language_book[$book->language] ?? 'Desconocido' }}</p>
                     
                     <p><span class="font-bold">| Sinopsis: </span>{{ $book->synopsis }}</p>
                     

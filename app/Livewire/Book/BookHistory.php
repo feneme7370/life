@@ -60,34 +60,8 @@ class BookHistory extends Component
         $rating_stars = Book::rating_stars();
         $format_book = Book::format_book();
 
-        $reads = BookRead::where('user_id', Auth::id())
-            ->with('book') // para traer el libro asociado
-            ->whereHas('book', function ($q) {
-                $q->where('title', 'like', "%{$this->search}%")
-                ->orWhere('slug', 'like', "%{$this->search}%")
-                            ->orWhereHas('book_subjects', function ($q) {
-                  $q->where('name', 'like', "%{$this->search}%");
-              })
-            ->orWhereHas('book_collections', function ($q) {
-                  $q->where('name', 'like', "%{$this->search}%");
-              });
-            })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
-
-        $books_to_reads = Book::with('reads')
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
-
-        $books_to_comments = Book::with('reads')
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
-
         return view('livewire.book.book-history', compact(
             'title',
-            'reads',
-            'books_to_reads',
-            'books_to_comments',
 
             'media_type_content',
             'status_book',

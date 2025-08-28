@@ -33,6 +33,7 @@ class BookCreate extends Component
     $format = 2, 
     $media_type = 1, 
     $status = 3, 
+    $language = 0, 
 
     $cover_image, 
     $cover_image_url, 
@@ -46,7 +47,8 @@ class BookCreate extends Component
     $media_type_content,
     $status_book,
     $rating_stars,
-    $format_book;
+    $format_book,
+    $language_book;
 
     public $subjects, $genres, $tags, $collections;
 
@@ -76,6 +78,7 @@ class BookCreate extends Component
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
             
+            'language' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'format' => ['nullable', 'numeric', 'min:1'],
@@ -105,6 +108,7 @@ class BookCreate extends Component
         'notes' => 'notas',
         'is_favorite' => 'favorito',
         
+        'language' => 'idioma',
         'category' => 'categoria',
         'rating' => 'valoracion',
         'format' => 'formato',
@@ -173,6 +177,7 @@ class BookCreate extends Component
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
         $this->category_book = Book::category_book();
+        $this->language_book = Book::language_book();
 
         // relaciones con otras tablas
         $this->subjects = Subject::where('user_id', Auth::user()->id)->orderBy('name', 'ASC')->get();

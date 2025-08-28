@@ -31,17 +31,15 @@
         </div>
     @endsession
 
-    <div class="p-4">
-        <div class="grid grid-cols-12 gap-1">
+    <div class="p-1">
+        <div class="flex justify-between items-center gap-1">
             {{-- buscar item --}}
             <input type="text" wire:model.debounce.500ms.live="search"
                 placeholder="Buscar..."
-                class="border-b px-3 py-1 mb-3 w-full col-span-4">
+                class="border-b px-3 py-1 mb-3 w-8/12">
 
-            <span class="col-span-7"></span>
-
-            <flux:dropdown>
-                <flux:button class="col-span-1 text-center" icon:trailing="chevron-down">Ver</flux:button>
+            <flux:dropdown class="px-3 py-1 mb-3 w-3/12 ">
+                <flux:button class="text-xs text-center" icon:trailing="chevron-down">Ver</flux:button>
 
                 <flux:menu>
                     <flux:menu.radio.group wire:model.debounce.500ms.live="perPage">
@@ -52,6 +50,7 @@
                     </flux:menu.radio.group>
                 </flux:menu>
             </flux:dropdown>
+
         </div>
 
         {{-- cuadricula --}}
@@ -71,13 +70,12 @@
                             <div class="text-sm md:text-base font-semibold hover:underline line-clamp-3">
                                 <a
                                     href="{{ route('book_view', ['uuid' => $item->uuid]) }}"
-                                >{{ $item->title }}</a>
+                                >
+                                    {{ $item->title }}
+                                </a>
                             </div>
 
                             <div class="flex flex-col gap-1">
-                                <span class="text-sm md:font-normal text-gray-400">{{ $item->media_type == null ? '' :
-                                    $media_type_content[$item->media_type] }} ({{ \Carbon\Carbon::parse($item->release_date)->year
-                                    }})</span>
                                 <span class="text-sm md:font-normal text-gray-400">{{ $rating_stars[$item->rating] ??
                                     'Sin valorar' }}</span>
                                 <span class="text-sm md:font-normal text-gray-400">{{ $item->pages }} Pags.</span>
@@ -118,18 +116,6 @@
                                 </flux:badge>
                             @endforeach
                         </div>
-
-                        {{-- <div class="flex gap-1 flex-wrap">
-                            @foreach ($item->book_tags as $tag_item)
-                                <flux:badge size="sm" variant="pill" as="button" variant="" color="purple">
-                                    <a 
-                                        href="{{ route('books_library', ['c' => $tag_item->uuid]) }}"
-                                    >
-                                        {{$tag_item->name }}
-                                    </a>
-                                </flux:badge>
-                            @endforeach
-                        </div> --}}
                         
                     </div>
 
@@ -137,7 +123,7 @@
                         <div class="flex justify-between">
                             <div class=" flex items-start justify-center flex-col gap-1">
                                 @if ($item->reads->count())
-                                    <span class="text-sm italic">{{ $status_book[$item->status] ?? 'Desconocido' }}</span>
+                                    <span class="text-sm italic">{{ $status_book[2] ?? 'Leido' }}</span>
                                 @endif
                                 @if ($item->notes)
                                     <span class="text-sm italic">✍️ Comentado</span>

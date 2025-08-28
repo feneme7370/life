@@ -19,6 +19,7 @@ class BookView extends Component
     $status_book,
     $rating_stars,
     $format_book,
+    $language_book,
     $category_book;
 
     // propiedad para agregar nota
@@ -162,6 +163,7 @@ class BookView extends Component
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
         $this->category_book = Book::category_book();
+        $this->language_book = Book::language_book();
 
         return view('livewire.book.book-view', compact(
             'title',

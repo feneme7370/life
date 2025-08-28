@@ -57,15 +57,12 @@
                     <span class="text-gray-950 dark:text-gray-400"> ( {{ \Carbon\Carbon::parse($book->release_date)->year }} )</span>
                 </p>
         
-                <div class="flex gap-2 items-center">
+                <div class="flex gap-1 items-center text-center">
                     
-
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{$book->number_collection}}</span>
                                 ° Volumen 
                         </p>
-
-                    
 
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
@@ -73,25 +70,26 @@
                                 Pags.
                         </p>
 
-
-
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $media_type_content[$book->media_type] ?? 'Desconocido' }}</span>
                         </p>
 
-
-
+                    </div>
+                    <div class="flex gap-1 items-center text-center">
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $format_book[$book->format] ?? 'Desconocido' }}</span>
                         </p>
 
-
-
                         <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                             | 
                             <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $category_book[$book->category] ?? 'Desconocido' }}</span>
+                        </p>
+
+                        <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
+                            | 
+                            <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $language_book[$book->language] ?? 'Desconocido' }}</span>
                         </p>
 
                     
@@ -166,11 +164,11 @@
             <flux:separator text="Anotaciones Personales" />
 
             <div  class="flex gap-2 items-center">
-                @if ($book->status)
+                {{-- @if ($book->status)
                     <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">
                         <span class="text-gray-800 dark:text-gray-300  font-bold">{{ $status_book[$book->status] ?? 'Desconocido' }}</span>
                     </p>
-                @endif
+                @endif --}}
 
                 @if ($book->rating)
                     <p class="mb-2 text-sm sm:text-base text-gray-950 dark:text-gray-400 ">

@@ -13,9 +13,9 @@ class Subjects extends Component
 
     // propiedades para paginacion y orden
     public $search = '';
-    public $sortField = 'id';
+    public $sortField = 'name';
     public $sortDirection = 'asc';
-    public $perPage = 10;
+    public $perPage = 30;
 
     // propiedades del item
     public $subjectId;

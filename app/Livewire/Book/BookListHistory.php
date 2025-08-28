@@ -28,10 +28,11 @@ class BookListHistory extends Component
     $status_book,
     $rating_stars,
     $format_book,
-    $category_book;
+    $category_book,
+    $language_book;
 
     // mostrar elementos al hacer click
-    public $list_all_data = 'ligera';
+    public $list_all_data = 'completa';
 
     // refrescar paginacion
     public function updatingSearch(){$this->resetPage();}
@@ -59,6 +60,7 @@ class BookListHistory extends Component
         $this->rating_stars = Book::rating_stars();
         $this->format_book = Book::format_book();
         $this->category_book = Book::category_book();
+        $this->language_book = Book::language_book();
 
         $books = Book::where('user_id', Auth::id())
             ->orderBy($this->sortField, $this->sortDirection)
