@@ -44,6 +44,7 @@ class DiaryCreate extends Component
         $this->day = Carbon::now()->format('Y-m-d');
         $this->humor = 1;
     }
+
     // funcion para crear item
     public function save(){
         // datos automaticos

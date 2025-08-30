@@ -5,6 +5,7 @@ namespace App\Livewire\Subject;
 use App\Models\Subject;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Subjects extends Component
 {
@@ -59,7 +60,8 @@ class Subjects extends Component
     {
         $title = ['singular' => 'sujeto', 'plural' => 'sujetos'];
 
-        $subjects = Subject::select('id', 'name', 'slug', 'country', 'birthdate', 'cover_image_url', 'uuid')            
+        $subjects = Subject::where('user_id', Auth::id())
+            ->select('id', 'name', 'slug', 'country', 'birthdate', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%")

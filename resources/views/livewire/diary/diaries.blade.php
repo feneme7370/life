@@ -7,9 +7,15 @@
     </div>
 
     {{-- boton para abrir modal y crear --}}
-        <a href="{{ route('diary_create') }}">
+    <div class="flex justify-between items-center gap-1">
+        <a href="{{ route('diary_create') }}" >
             <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Nuevo</flux:button>
         </a>
+
+        <flux:button wire:click='clearDate' size="sm" variant="ghost" color="purple" icon="calendar" size="sm">Limpiar</flux:button>
+
+    </div>
+
 
     {{-- modales de crear y editar --}}
     {{-- <livewire:diary.diary-create>
@@ -27,6 +33,60 @@
             <p>{{ $value }}</p>
         </div>
     @endsession
+
+<div wire:ignore class="text-center my-1">
+  <input id="diary_calendar" type="text" hidden readonly />
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script>
+    document.addEventListener('livewire:navigated', () => {
+
+        const input = document.getElementById('diary_calendar');
+        if (!input) return; // si el input no existe todavía, no inicializamos
+
+        if (window.myPicker) {
+            window.myPicker.destroy();
+        }
+
+            window.myPicker = new Litepicker({
+            element: document.getElementById('diary_calendar'),
+            format: 'YYYY-MM-DD',
+            singleMode: true,
+            inlineMode: true,
+            highlightedDays: @json($highlightedDays),
+            setup: (picker) => {
+                picker.on('selected', (date) => {
+                    // Cuando seleccionás un día, lo mandamos a Livewire
+                    Livewire.dispatch('reading-day-selected', { date: date.format('YYYY-MM-DD') });
+                });
+            }
+        });
+    });
+</script>
+@endpush
+
+<style>
+.litepicker .day-item.is-highlighted
+/* .litepicker .day-item.is-selected  */
+{
+    background-color: #70157e !important; /* azul Tailwind-600 */
+    color: #fff !important;
+    border-radius: 40% !important; /* redondeado */
+}
+
+.litepicker .day-item.is-inRange,
+.litepicker .day-item.is-start-date,
+.litepicker .day-item.is-end-date
+{
+    background-color: #40024a !important; /* azul Tailwind-600 */
+    color: #fff !important;
+    border-radius: 30% !important; /* redondeado */
+}
+
+
+</style>
 
     <div class="p-4">
         {{-- buscar item --}}

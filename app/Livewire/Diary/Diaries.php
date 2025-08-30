@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Diary;
 
-use App\Models\Diary\Diary;
 use Livewire\Component;
+use App\Models\Diary\Diary;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Diaries extends Component
 {
@@ -19,6 +21,8 @@ class Diaries extends Component
 
     // propiedades del item
     public $diaryId;
+    public $dayStart;
+    public $dayEnd;
 
     // refrescar paginacion
     public function updatingSearch(){$this->resetPage();}
@@ -34,6 +38,16 @@ class Diaries extends Component
             $this->sortDirection = 'asc';
         }
         $this->sortField = $field;
+    }
+
+    public $highlightedDays = [];
+
+    public function mount()
+    {
+        $this->highlightedDays = Diary::pluck('day')
+            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
+            ->toArray();
+        // dd($this->highlightedDays);
     }
 
     // abrir modal para editar
@@ -55,18 +69,39 @@ class Diaries extends Component
         $this->redirectRoute('diaries', navigate:true);
     }
 
+
+    #[On('reading-day-selected')]
+    public function selectDay($date)
+    {
+        $this->dayStart = \Carbon\Carbon::parse($date)->format('Y-m-d');
+        $this->dayEnd = \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+    public function clearDate(){
+        $this->dayStart = \Carbon\Carbon::parse('1900-01-01')->format('Y-m-d');
+        $this->dayEnd = \Carbon\Carbon::parse('2100-01-01')->format('Y-m-d');
+    }
+
     // render de pagina
     public function render()
     {
+
         $title = ['singular' => 'diario', 'plural' => 'diarios'];
 
-        $diaries = Diary::where(function ($query) {
+        $diaries = Diary::where('user_id', Auth::id())
+            ->where(function ($query) {
                 $query->where('title', 'like', "%{$this->search}%")
                       ->orWhere('content', 'like', "%{$this->search}%")
                       ->orWhere('day', 'like', "%{$this->search}%");
             })
+            ->when($this->dayStart !== null, function( $query) {
+                return $query->where('day', '>=', $this->dayStart);
+            })
+            ->when($this->dayEnd !== null, function( $query) {
+                return $query->where('day', '<=', $this->dayEnd);
+            })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
+
 
         $humor_status = Diary::humor_status();
 

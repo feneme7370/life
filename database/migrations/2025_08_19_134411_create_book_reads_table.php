@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             // fecha de inicio y fin de lectura
-            $table->date('start_read');
-            $table->date('end_read');
+            $table->date('start_read')->nullable();
+            $table->date('end_read')->nullable();
 
             // relaciones
             $table->foreignId('book_id')->constrained()->onDelete('cascade');

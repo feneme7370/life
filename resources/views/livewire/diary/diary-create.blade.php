@@ -14,10 +14,6 @@
             </flux:select>
 
             <flux:input wire:model='title' label="Titulo" placeholder="Titulo del dia" />
-            
-            {{-- <div wire:ignore>
-                <flux:textarea wire:model='content' id="summernote" label="Contenido" placeholder="Coloque el contenido" resize="vertical"/>
-            </div> --}}
 
             <x-pages.forms.quill-textarea-form 
                 id_quill="editor_create_content" 

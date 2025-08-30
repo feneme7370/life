@@ -5,6 +5,7 @@ namespace App\Livewire\Tag;
 use App\Models\Tag;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Tags extends Component
 {
@@ -60,7 +61,8 @@ class Tags extends Component
     {
         $title = ['singular' => 'etiqueta', 'plural' => 'etiquetas'];
 
-        $tags = Tag::select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
+        $tags = Tag::where('user_id', Auth::id())
+            ->select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%");

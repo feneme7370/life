@@ -123,6 +123,14 @@
                     <flux:error name="is_favorite" />
                 </flux:field>
 
+                <flux:field variant="inline" class="flex items-center">
+                    <flux:checkbox wire:model="status" />
+
+                    <flux:label>Abandonado?</flux:label>
+
+                    <flux:error name="status" />
+                </flux:field>
+
             </div>
 
             <div class="flex">

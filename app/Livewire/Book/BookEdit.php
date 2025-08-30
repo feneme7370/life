@@ -31,7 +31,7 @@ class BookEdit extends Component
     $notes, 
     $is_favorite,
 
-    $category = 0, 
+    $category, 
     $rating, 
     $format, 
     $media_type, 
@@ -84,7 +84,7 @@ class BookEdit extends Component
             'rating' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'format' => ['nullable', 'numeric', 'min:1'],
             'media_type' => ['nullable', 'numeric', 'min:1'],
-            'status' => ['nullable', 'numeric', 'min:1'],
+            'status' => ['nullable', 'numeric'],
             
             'cover_image' => ['nullable', 'image', 'max:2048'], // si es archivo
             'cover_image_url' => ['nullable', 'url', 'max:65535'],
@@ -123,9 +123,7 @@ class BookEdit extends Component
         'user_id' => 'usuario',
     ];
 
-    // recibe llamada al componente y activa la funcion edit
-    // #[On('book-edit')]
-    // public function edit($uuid){
+    // carga datos para editar
     public function mount($uuid){
         $this->book = Book::where('uuid', $uuid)->first();
         
@@ -146,7 +144,7 @@ class BookEdit extends Component
         $this->rating = $this->book->rating; 
         $this->format = $this->book->format; 
         $this->media_type = $this->book->media_type; 
-        $this->status = $this->book->status; 
+        $this->status = $this->book->status == 5 ? true : false; 
         
         $this->cover_image = $this->book->cover_image; 
         $this->cover_image_url = $this->book->cover_image_url; 
@@ -169,7 +167,12 @@ class BookEdit extends Component
         $this->rating = $this->rating == '' ? 0 : $this->rating;
         $this->number_collection = $this->number_collection == '' ? 1 : $this->number_collection;
         $this->is_favorite = $this->is_favorite == true ? 1 : 0;
-
+        $this->status = $this->status == true ? 5 : 0;
+        
+        // Limpiamos espacios y etiquetas vacías
+        $this->summary = (trim(strip_tags($this->summary))) === '' ? null : $this->summary;
+        $this->notes = (trim(strip_tags($this->notes))) === '' ? null : $this->notes;
+        
         // validacion
         $validated_data = $this->validate();
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Genre;
 use App\Models\Genre;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Genres extends Component
 {
@@ -60,7 +61,8 @@ class Genres extends Component
     {
         $title = ['singular' => 'genero', 'plural' => 'generos'];
 
-        $genres = Genre::select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
+        $genres = Genre::where('user_id', Auth::id())
+            ->select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%");

@@ -5,6 +5,7 @@ namespace App\Livewire\Collection;
 use Livewire\Component;
 use App\Models\Collection;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Collections extends Component
 {
@@ -60,7 +61,8 @@ class Collections extends Component
     {
         $title = ['singular' => 'coleccion', 'plural' => 'colecciones'];
 
-        $collections = Collection::select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
+        $collections = Collection::where('user_id', Auth::id())
+            ->select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%");
