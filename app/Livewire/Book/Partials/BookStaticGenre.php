@@ -73,7 +73,8 @@ class BookStaticGenre extends Component
             ->with('reads') // importante para evitar N+1
             ->get();
 
-        $filteredBooks = $this->books->filter(function ($book) use ($year_start, $year_end) {
+        // traer libros no abandonados y entre fechas
+        $filteredBooks = $this->books->where('status', '!=', 5)->filter(function ($book) use ($year_start, $year_end) {
             return $book->reads->contains(function ($read) use ($year_start, $year_end) {
                 $endYear = \Carbon\Carbon::parse($read->end_read)->year;
 
@@ -141,6 +142,34 @@ class BookStaticGenre extends Component
 
         $this->books_total_pages = $filteredBooks->sum(fn ($book) => (int) $book->pages);
         
+        $pendingComments = $filteredBooks->filter(fn($book) => !$book->notes);
+        
+        $pendingBooks = $this->books->filter(fn($book) => !$book->reads->count());
+
+        $abandonatedBooks = $this->books
+                    ->filter(fn($book) => $book->status === 5)
+                    ->filter(function ($book) use ($year_start, $year_end) {
+                        return $book->reads->contains(function ($read) use ($year_start, $year_end) {
+                            $endYear = \Carbon\Carbon::parse($read->end_read)->year;
+
+                            // Si están seteados los dos límites
+                            if ($year_start && $year_end) {
+                                return $endYear >= $year_start && $endYear <= $year_end;
+                            }
+
+                            // Si solo está el inicio
+                            if ($year_start) {
+                                return $endYear >= $year_start;
+                            }
+
+                            // Si solo está el fin
+                            if ($year_end) {
+                                return $endYear <= $year_end;
+                            }
+
+                            return true;
+                        });
+                    });
 
         // Obtener los años únicos usando Carbon
         $read_years = $reads->map(function($read) {
@@ -171,6 +200,9 @@ class BookStaticGenre extends Component
             'sagaStats',
             'bookStats',
             'filteredBooks',
+            'abandonatedBooks',
+            'pendingBooks',
+            'pendingComments',
         ));
     }
 }

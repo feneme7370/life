@@ -126,7 +126,7 @@
                 
             </div>
     
-            {{-- static language --}}
+            {{-- static format --}}
             <div>
                 <flux:heading>Formato ({{ collect($filteredBooks)->groupBy('format')->count() }})</flux:heading>
     
@@ -182,17 +182,17 @@
     <flux:separator text="📌 Pendientes de comentar" />
     {{-- static list comment --}}
     <div>
-        <flux:heading>Pendientes de comentar ({{ $filteredBooks->filter(fn($book) => !$book->notes)->count() }})</flux:heading>
+        <flux:heading>Pendientes de comentar ({{ $pendingComments->count() }})</flux:heading>
 
-        @foreach($filteredBooks as $book)
-            @if (!$book->notes)
+        @foreach($pendingComments as $book)
+            {{-- @if (!$book->notes) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            @endif
+            {{-- @endif --}}
         @endforeach
         
     </div>
@@ -201,17 +201,17 @@
     <flux:separator text="📖 Pendientes totales a leer" />
     {{-- static list pend reads --}}
     <div>
-        <flux:heading>Pendientes de leer ({{ $books->filter(fn($book) => !$book->reads->count() && $book->status !== 5)->count() }})</flux:heading>
+        <flux:heading>Pendientes de leer ({{ $pendingBooks->count() }})</flux:heading>
 
-        @foreach($books as $book)
-            @if (!$book->reads->count() && $book->status !== 5)
+        @foreach($pendingBooks as $book)
+            {{-- @if (!$book->reads->count()) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            @endif
+            {{-- @endif --}}
         @endforeach
         
     </div>
@@ -219,17 +219,17 @@
     <flux:separator text="🚫 Abandonados" />
     {{-- static list pend reads --}}
     <div>
-        <flux:heading>Abandonados ({{ $books->filter(fn($book) => !$book->reads->count() && $book->status === 5)->count() }})</flux:heading>
+        <flux:heading>Abandonados ({{ $abandonatedBooks->count() }})</flux:heading>
 
-        @foreach($books as $book)
-            @if (!$book->reads->count() && $book->status === 5)
+        @foreach($abandonatedBooks as $book)
+            {{-- @if ( $book->status === 5) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            @endif
+            {{-- @endif --}}
         @endforeach
         
     </div>
