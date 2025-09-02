@@ -6,7 +6,7 @@
 
             <flux:menu>
                 <flux:menu.radio.group>
-                    <flux:menu.radio wire:click="newYear('todo')">Todos</flux:menu.radio>
+                    <flux:menu.radio wire:navigated wire:click="newYear('todo')">Todos</flux:menu.radio>
                     @foreach ($read_years as $read_year)
                         <flux:menu.radio wire:click="newYear({{ $read_year }})">{{ $read_year }}</flux:menu.radio>
                     @endforeach
@@ -16,7 +16,6 @@
     </div>
 
     <div>
-
         <flux:separator text="📊 Estadísticas básicas" />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2">
             {{-- static totals --}}
@@ -233,5 +232,62 @@
         @endforeach
         
     </div>
+
+        <flux:separator text="📊 Grafico por mes" />
+        {{-- <div class="mx-auto md:w-1/2">
+            <canvas id="booksChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+    let booksChart = null;
+
+    function renderBooksChart(labels, data) {
+        const ctx = document.getElementById("booksChart").getContext("2d");
+
+        if (booksChart) {
+            booksChart.destroy(); // destruimos el gráfico anterior
+        }
+
+        booksChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Libros leídos por mes",
+                    data: data,
+                    backgroundColor: "rgba(54, 162, 235, 0.5)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Se ejecuta cada vez que Livewire actualiza la vista
+    document.addEventListener('livewire:navigated', () => {
+        renderBooksChart(@json($filteredBooksMonths->keys()), @json($filteredBooksMonths->values()));
+    });
+    </script> --}}
+
+    <div>
+        @foreach ($filteredBooksMonths as $key => $month)
+            <p>
+                <x-pages.dictionary.month :number="$key" type="short" />: {{ str_repeat('📖', $month) }}
+            </p>
+        @endforeach
+    </div>
+    {{-- <div>
+        @foreach ($filteredBooksOrderMounth as $book)
+            @foreach ($book->reads as $read)
+                
+                <p>{{ \Carbon\Carbon::parse($read->end_read)->format('m-d') }}: {{ $book->title }}</p>
+            @endforeach
+        @endforeach
+    </div> --}}
 
 </div>

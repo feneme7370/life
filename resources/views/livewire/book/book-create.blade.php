@@ -89,6 +89,12 @@
                 />
             </div>
 
+            {{-- <flux:textarea wire:model='quoteContent' row="20" label="Cita o Frase" placeholder="Coloque la la cita o frase" resize="vertical"/> --}}
+            <div class="grid grid-cols-2 gap-1">
+                <flux:input wire:model='start_read' type="date" max="2999-12-31" label="Inicio de lectura" />
+                <flux:input wire:model='end_read' type="date" max="2999-12-31" label="Fin de lectura" />
+            </div>
+
             <flux:text class="text-xs italic">Personal</flux:text>
 
             {{-- <flux:textarea wire:model='summary' label="Resumen personal" placeholder="Coloque un resumen" resize="vertical"/>

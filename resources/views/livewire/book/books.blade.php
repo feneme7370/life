@@ -122,9 +122,13 @@
                     <div class="w-full">
                         <div class="flex justify-between">
                             <div class=" flex items-start justify-center flex-col gap-1">
-                                @if ($item->reads->count())
-                                    <span class="text-sm italic">{{ $status_book[2] ?? 'Leido' }}</span>
+
+                                @if ($item->reads->filter(fn($read) => $read->end_read == '')->count())
+                                    {{ $status_book[3] }}
+                                @elseif($item->reads->count())
+                                    <span class="text-sm italic">{{ $item->status == 5 ? $status_book[5] : $status_book[2]}}</span>
                                 @endif
+
                                 @if ($item->notes)
                                     <span class="text-sm italic">✍️ Comentado</span>
                                 @endif

@@ -24,6 +24,7 @@
                         <span class="font-bold">| Publicacion: </span>{{ \Carbon\Carbon::parse($book->release_date)->year }}
                     </p>
         
+                    <p><span class="font-bold">| Link Imagen: </span>{{ $book->cover_image_url }}</p>
                     <p>
                         <span class="font-bold">| Saga: </span>
                         

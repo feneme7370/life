@@ -55,14 +55,14 @@ class BookView extends Component
 
         $this->validate([
             'start_read' => ['required', 'date'],
-            'end_read' => ['required', 'date'],
+            'end_read' => ['nullable', 'date'],
         ]);
 
         BookRead::create([
             'user_id' => Auth::id(),
             'book_id' => $this->book->id,
             'start_read' => $this->start_read,
-            'end_read' => $this->end_read,
+            'end_read' => $this->end_read ?? '',
         ]);
 
         $this->reads = BookRead::where('book_id', $this->book->id)->get();
