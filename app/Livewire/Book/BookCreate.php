@@ -153,6 +153,11 @@ class BookCreate extends Component
         // validacion
         $validated_data = $this->validate();
 
+        $this->validate([
+            'start_read' => ['required', 'date'],
+            'end_read' => ['nullable', 'date'],
+        ]);
+
         // crear dato
         $book = Book::create($validated_data);
 
@@ -161,11 +166,6 @@ class BookCreate extends Component
         $book->book_tags()->sync($this->selected_book_tags);
         $book->book_subjects()->sync($this->selected_book_subjects);
         $book->book_collections()->sync($this->selected_book_collections);
-
-        $this->validate([
-            'start_read' => ['required', 'date'],
-            'end_read' => ['nullable', 'date'],
-        ]);
 
         BookRead::create([
             'user_id' => Auth::id(),

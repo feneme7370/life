@@ -2,7 +2,7 @@
     {{-- datos de la pagina --}}
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ ucfirst($title['plural']) }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">Administrar {{ $title['plural'] }}</flux:subheading>
+        <flux:subheading size="lg" class="mb-6">Administrar {{ $title['plural'] }} leidos</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
 

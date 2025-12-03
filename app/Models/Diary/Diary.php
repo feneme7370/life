@@ -20,6 +20,11 @@ class Diary extends Model
         'user_id',
     ];
 
+    // tiene muchas imagenes
+    public function images() {
+        return $this->hasMany(DiaryImage::class);
+    }
+
     // pertenece a un usuario
     public function user()
     {

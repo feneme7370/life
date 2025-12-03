@@ -27,6 +27,10 @@
                 model_data="{{ $content }}" 
             />
 
+            <flux:input wire:model="images" type="file" multiple accept="image/*" label="Imagenes" placeholder="Imagenes del dia" />
+            
+            <flux:icon.loading class="block w-full" wire:loading.delay />
+            
             <div class="flex">
                 <flux:spacer />
 

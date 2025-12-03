@@ -16,7 +16,7 @@ class Books extends Component
     public $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
-    public $perPage = 30;
+    public $perPage = 500;
 
     // propiedades del item
     public $bookId;

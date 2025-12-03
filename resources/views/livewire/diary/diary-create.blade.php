@@ -14,14 +14,18 @@
             </flux:select>
 
             <flux:input wire:model='title' label="Titulo" placeholder="Titulo del dia" />
-
+            
             <x-pages.forms.quill-textarea-form 
                 id_quill="editor_create_content" 
                 name="content"
                 rows="15" 
                 placeholder="{{ __('Notas personal') }}" model="content"
                 model_data="{{ $content }}" 
-            />
+                />
+                
+            <flux:input wire:model="images" type="file" multiple accept="image/*" label="Imagenes" placeholder="Imagenes del dia" />
+
+            <flux:icon.loading class="block w-full" wire:loading.delay />
 
             <div class="flex">
                 <flux:spacer />

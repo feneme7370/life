@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Quote;
+use App\Models\Diary\DiaryImage;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
@@ -40,6 +41,7 @@ class Book extends Model
 
         'uuid',
         'user_id',
+        'reads_max_end_read',
     ];
 
     // pertenece a un usuario
@@ -80,7 +82,7 @@ class Book extends Model
     public function reads(){
         return $this->hasMany(BookRead::class);
     }
-
+    
     // valoraciones en estrellas para cada libro
     public static function language_book(){
         return [

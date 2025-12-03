@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Diary\Diary;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use App\Models\Diary\DiaryImage;
 use Illuminate\Support\Facades\Auth;
 
 class Diaries extends Component
@@ -61,12 +62,28 @@ class Diaries extends Component
         \Flux\Flux::modal('delete-diary')->show();
     }
 
+    public function deleteImage($path){
+
+        if(\Illuminate\Support\Facades\File::exists($path)){
+            \Illuminate\Support\Facades\File::delete($path);
+        }
+        DiaryImage::where('path', $path)->delete();
+    }
+
     // eliminar item
     public function destroy(){
-        Diary::find($this->diaryId)->delete();
+        $diary = Diary::find($this->diaryId);
+
+        if($diary->images){
+            foreach($diary->images as $image){
+                $this->deleteImage($image->path);
+            }
+        }
+
+        $diary->delete();
         \Flux\Flux::modal('delete-diary')->close();
         session()->flash('success', 'Borrado correctamente');
-        $this->redirectRoute('diaries', navigate:true);
+        // $this->redirectRoute('diaries', navigate:true);
     }
 
 

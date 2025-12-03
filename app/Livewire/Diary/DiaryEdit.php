@@ -2,12 +2,17 @@
 
 namespace App\Livewire\Diary;
 
-use App\Models\Diary\Diary;
 use Livewire\Component;
-use Livewire\Attributes\On;
+use App\Models\Diary\Diary;
+use Livewire\WithFileUploads;
+use App\Models\Diary\DiaryImage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class DiaryEdit extends Component
 {
+    use WithFileUploads;
+    
     // propiedades del item
     public 
     $day,
@@ -18,6 +23,8 @@ class DiaryEdit extends Component
     $user_id;
     public $diaryId, $diary;
 
+    public $images = []; // hasta 6
+
     // reglas de validacion
     protected function rules(){
         return [
@@ -27,6 +34,8 @@ class DiaryEdit extends Component
             'content' => ['required', 'string'],
             'uuid' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('diaries', 'uuid')->ignore($this->diary?->id ?? 0)],
             'user_id' => ['required', 'exists:users,id'],
+
+            'images.*' => 'nullable|image|max:2048', // 2MB c/u
         ];
     }
 
@@ -38,6 +47,8 @@ class DiaryEdit extends Component
         'content' => 'contenido',
         'uuid' => 'uuid',
         'user_id' => 'usuario',
+
+        'images' => 'imagenes',
     ];
 
     // recibe llamada al componente y activa la funcion edit
@@ -61,6 +72,33 @@ class DiaryEdit extends Component
 
         // actualizar dato
         $this->diary->update($validated_data);
+
+        foreach ($this->images as $upload) {
+            $filename = uniqid() . '.jpg';
+            $path_folder = "diary/{$this->diary->id}/";
+            $path = $path_folder . $filename;
+            
+            // Verificar si la carpeta existe, si no, crearla
+            if (!file_exists($path_folder)) {
+                mkdir($path_folder, 0755, true);
+            }
+
+            // create new manager instance with desired driver
+            $manager = new ImageManager(Driver::class);
+
+            // read jpeg image
+            $image = $manager->read($upload);
+
+            // editar imagenes
+            $image = $image->scale(width:800);
+
+            $image->save($path);
+            
+            DiaryImage::create([
+                'path' => $path,
+                'diary_id' => $this->diary->id,
+            ]);
+        }
 
         // resetear propiedades
         $this->reset();
