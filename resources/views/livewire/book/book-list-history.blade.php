@@ -67,7 +67,7 @@
                     </p>
 
                     <p><span class="font-bold">| Valoracion: </span>{{ $rating_stars[$book->rating] ?? 'Desconocido' }} | <span class="font-bold">Favorito: </span>{{ $book->is_favorite ? 'Si' : 'No' }}</p>
-                    <p><span class="font-bold">| Resumen: </span>{!! $book->summary !!}</p>
+                    {{-- <p><span class="font-bold">| Resumen: </span>{!! $book->summary !!}</p> --}}
                     <p><span class="font-bold">| Notas: </span>{!! $book->notes !!}</p>
         
                     <p>
@@ -101,9 +101,9 @@
                         <span> ({{ \Carbon\Carbon::parse($book->release_date)->year }})</span>
                     </p>
 
-                    @if ($book->summary)
+                    {{-- @if ($book->summary)
                         <p><span class="font-bold">| Resumen: </span>{!! $book->summary !!}</p>
-                    @endif
+                    @endif --}}
 
                     @if ($book->notes)
                         <p><span class="font-bold">| Notas: </span>{!! $book->notes !!}</p>

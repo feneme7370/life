@@ -41,7 +41,6 @@ class Book extends Model
 
         'uuid',
         'user_id',
-        'reads_max_end_read',
     ];
 
     // pertenece a un usuario

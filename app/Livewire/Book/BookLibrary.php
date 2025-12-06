@@ -71,18 +71,14 @@ class BookLibrary extends Component
         // ;
         
         $books = Book::query()
-            ->select('books.*')->where('user_id', Auth::id())
+            ->where('user_id', Auth::id())
         
+            // no abandonado
             ->where('status', '!=', 5)
-            // SOLO libros con lecturas (reads)
-            // Subconsulta para obtener la última fecha de lectura
-            ->selectSub(function ($query) {
-                $query->from('book_reads')
-                    ->selectRaw('MAX(end_read)')
-                    ->whereColumn('book_reads.book_id', 'books.id');
-            }, 'last_end_read')
-            ->whereHas('reads')
 
+            ->whereHas('reads')
+            ->withMax('reads', 'end_read')
+            ->whereHas('reads', fn($q) => $q->where('end_read', '<>' ,''))
 
             ->when($this->status_read, function( $query) {
                 return $query->where('status', $this->status_read);
@@ -119,10 +115,11 @@ class BookLibrary extends Component
                     $q->where('collections.uuid', $this->collection_selected);
                 });
             })
-            ->orderBy('last_end_read', $this->sortDirection)
+
+            ->orderBy('reads_max_end_read', $this->sortDirection)
 
             ->paginate($this->perPage);
-        // dd($books);
+
         return view('livewire.book.book-library', compact(
             'title',
             'books',

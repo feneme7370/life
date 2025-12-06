@@ -108,56 +108,19 @@ class BookStaticGenre extends Component
         ->values();                    // limpio los índices
 
         // traer libros no abandonados y entre fechas ordenados por la cosulta
-        $filteredBooks = $this->books->where('status', '!=', 5)
-        ->filter(function ($book) use ($year_start, $year_end) {
-            return $book->reads->contains(function ($read) use ($year_start, $year_end) {
-                $endYear = \Carbon\Carbon::parse($read->end_read)->year;
+        $filteredBooks = $this->books
+            ->where('status', '!=', 5)
+            ->filter(function ($book) use ($year_start, $year_end) {
 
-                // Si están seteados los dos límites
-                if ($year_start && $year_end) {
-                    return $endYear >= $year_start && $endYear <= $year_end;
-                }
+                return $book->reads->contains(function ($read) use ($year_start, $year_end) {
+                    $year = (int) substr($read->end_read, 0, 4); // más rápido que Carbon
 
-                // Si solo está el inicio
-                if ($year_start) {
-                    return $endYear >= $year_start;
-                }
+                    return
+                        (!$year_start || $year >= $year_start) &&
+                        (!$year_end   || $year <= $year_end);
+                });
 
-                // Si solo está el fin
-                if ($year_end) {
-                    return $endYear <= $year_end;
-                }
-
-                return true;
             });
-        });
-
-        // traer libros no abandonados y entre fechas ordenados por fecha de entrega
-        $filteredBooksOrderMounth = $this->books->where('status', '!=', 5)->filter(function ($book) use ($year_start, $year_end) {
-            return $book->reads->contains(function ($read) use ($year_start, $year_end) {
-                $endYear = \Carbon\Carbon::parse($read->end_read)->year;
-
-                // Si están seteados los dos límites
-                if ($year_start && $year_end) {
-                    return $endYear >= $year_start && $endYear <= $year_end;
-                }
-
-                // Si solo está el inicio
-                if ($year_start) {
-                    return $endYear >= $year_start;
-                }
-
-                // Si solo está el fin
-                if ($year_end) {
-                    return $endYear <= $year_end;
-                }
-
-                return true;
-            });
-            })->sortBy(function ($book) {
-                // Agarramos el último end_read disponible
-                return optional($book->reads->first())->end_read;
-        });
 
         // Generar todos los meses vacíos (de 01 a 12)
         $months = collect(range(1, 12))->mapWithKeys(fn ($m) => [str_pad($m, 2, '0', STR_PAD_LEFT) => 0]);
@@ -271,7 +234,6 @@ class BookStaticGenre extends Component
         return view('livewire.book.partials.book-static-genre', compact(
             'filteredBooks',
             'filteredBooksMonths',
-            'filteredBooksOrderMounth',
         ));
     }
 }
