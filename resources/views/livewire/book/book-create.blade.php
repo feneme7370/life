@@ -15,7 +15,7 @@
             <flux:textarea wire:model='synopsis' label="Sinopsis" placeholder="Coloque una sinopsis" resize="vertical"/>
             
             <div class="grid gap-1 grid-cols-3">
-                <flux:input wire:model='release_date' type="date" max="2999-12-31" label="Publicacion" />
+                <flux:input wire:model='release_date' type="number" min="1" max="2999" label="Publicacion" />
                 <flux:input wire:model='pages' label="Paginas" placeholder="Cantidad" />
                 <flux:select wire:model="category" label="Categoria" placeholder="Seleccionar...">
                     @foreach ($category_book as $key => $value)
@@ -52,6 +52,7 @@
                     wire:model="selected_book_subjects" 
                     label="Sujetos"
                     :items="$subjects"
+                    wire_model="author_name"
                 />
             </div>
 
@@ -65,6 +66,7 @@
                     wire:model="selected_book_collections" 
                     label="Coleccion"
                     :items="$collections"
+                    wire_model="collections_name"
                 />
 
             </div>
@@ -76,6 +78,7 @@
                     wire:model="selected_book_tags" 
                     label="Etiquetas"
                     :items="$tags"
+                    wire_model="tags_name"
                 />
             </div>
 
@@ -86,6 +89,7 @@
                     wire:model="selected_book_genres" 
                     label="Generos"
                     :items="$genres"
+                    wire_model="genres_name"
                 />
             </div>
 
@@ -113,7 +117,7 @@
                 id_quill="editor_create_notes" 
                 name="notes"
                 rows="15" 
-                placeholder="{{ __('Notas personal') }}" model="notes"
+                placeholder="{{ __('Reseña') }}" model="notes"
                 model_data="{{ $notes }}" 
             />
 

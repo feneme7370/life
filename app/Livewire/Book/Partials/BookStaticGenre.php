@@ -43,17 +43,11 @@ class BookStaticGenre extends Component
 
     // category to pages
     public $pagesBuckets = [
-        '📄 0-200' => 0,
-        '📄 201-400' => 0,
-        '📄 401-600' => 0,
-        '📄 601-800' => 0,
-        '📄 801-1000' => 0,
-        '📄 1001-1200' => 0,
-        '📄 1201-1400' => 0,
-        '📄 1401-1600' => 0,
-        '📄 1601-1800' => 0,
-        '📄 1801-2000' => 0,
-        '📄 2001 +' => 0,
+        '📄 0-250' => 0,
+        '📄 251-500' => 0,
+        '📄 501-750' => 0,
+        '📄 751-1000' => 0,
+        '📄 1001 +' => 0,
         '📄 xxx' => 0,
     ];
 
@@ -122,13 +116,14 @@ class BookStaticGenre extends Component
 
             });
 
-        // Generar todos los meses vacíos (de 01 a 12)
+        // Generar todos los meses vacíos (de 01 a 12) con cantidad de libros por mes
         $months = collect(range(1, 12))->mapWithKeys(fn ($m) => [str_pad($m, 2, '0', STR_PAD_LEFT) => 0]);
         $filteredBooksMonths = $this->books
             ->where('status', '!=', 5)
             ->flatMap(function ($book) use ($year_start, $year_end) {
                 return $book->reads
-                    ->filter(fn ($read) => $read->end_read && Carbon::parse($read->start_read)->year >= $year_start && Carbon::parse($read->end_read)->year <= $year_end)
+                    // ->filter(fn ($read) => $read->end_read && Carbon::parse($read->start_read)->year >= $year_start && Carbon::parse($read->end_read)->year <= $year_end)
+                    ->filter(fn ($read) => $read->end_read && Carbon::parse($read->end_read)->year == $year_end)
                     ->map(fn ($read) => \Carbon\Carbon::parse($read->end_read)->format('m'));
             })
             ->countBy()
@@ -218,17 +213,11 @@ class BookStaticGenre extends Component
             $pages = $book->pages;
 
             if ($pages == '') $this->pagesBuckets['📄 xxx']++;
-            elseif ($pages <= 200) $this->pagesBuckets['📄 0-200']++;
-            elseif ($pages <= 400) $this->pagesBuckets['📄 201-400']++;
-            elseif ($pages <= 600) $this->pagesBuckets['📄 401-600']++;
-            elseif ($pages <= 800) $this->pagesBuckets['📄 601-800']++;
-            elseif ($pages <= 1000) $this->pagesBuckets['📄 801-1000']++;
-            elseif ($pages <= 1200) $this->pagesBuckets['📄 1001-1200']++;
-            elseif ($pages <= 1400) $this->pagesBuckets['📄 1201-1400']++;
-            elseif ($pages <= 1600) $this->pagesBuckets['📄 1401-1600']++;
-            elseif ($pages <= 1800) $this->pagesBuckets['📄 1601-1800']++;
-            elseif ($pages <= 2000) $this->pagesBuckets['📄 1801-2000']++;
-            elseif ($pages > 2000) $this->pagesBuckets['📄 2001 +']++;
+            elseif ($pages <= 250) $this->pagesBuckets['📄 0-250']++;
+            elseif ($pages <= 500) $this->pagesBuckets['📄 251-500']++;
+            elseif ($pages <= 750) $this->pagesBuckets['📄 501-750']++;
+            elseif ($pages <= 1000) $this->pagesBuckets['📄 751-1000']++;
+            elseif ($pages > 1000) $this->pagesBuckets['📄 1001 +']++;
         }
 
         return view('livewire.book.partials.book-static-genre', compact(

@@ -45,8 +45,8 @@ class BookView extends Component
 
     // abrir modal de nota
     public function modalRead(){
-        $this->start_read = '';
-        $this->end_read = '';
+        $this->start_read = null;
+        $this->end_read = null;
         $this->modal('add-read')->show();
     }
 
@@ -62,7 +62,7 @@ class BookView extends Component
             'user_id' => Auth::id(),
             'book_id' => $this->book->id,
             'start_read' => $this->start_read,
-            'end_read' => $this->end_read ?? '',
+            'end_read' => $this->end_read,
         ]);
 
         $this->reads = BookRead::where('book_id', $this->book->id)->get();

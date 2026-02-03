@@ -51,6 +51,7 @@
                     wire:model="selected_book_subjects" 
                     label="Sujetos"
                     :items="$subjects"
+                    wire_model="subjects_name"
                 />
             </div>
 
@@ -63,6 +64,7 @@
                     wire:model="selected_book_collections" 
                     label="Coleccion"
                     :items="$collections"
+                    wire_model="collections_name"
                 />
             </div>
 
@@ -73,6 +75,7 @@
                     wire:model="selected_book_tags" 
                     label="Etiquetas"
                     :items="$tags"
+                    wire_model="tags_name"
                 />
             </div>
 
@@ -83,6 +86,7 @@
                     wire:model="selected_book_genres" 
                     label="Generos"
                     :items="$genres"
+                    wire_model="genres_name"
                 />
             </div>
 
@@ -103,7 +107,7 @@
                 id_quill="editor_create_notes" 
                 name="notes"
                 rows="15" 
-                placeholder="{{ __('Notas personal') }}" model="notes"
+                placeholder="{{ __('Reseña') }}" model="notes"
                 model_data="{{ $notes }}" 
             />
 

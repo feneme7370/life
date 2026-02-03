@@ -41,20 +41,22 @@
             </div>
 
             <!-- Mostrar imágenes guardadas -->
-            <div class="flex flex-wrap gap-1 mt-5 justify-center">
-                @foreach ($diary->images as $image)
-                    <div class="relative group">
-                        <img src="{{ asset($image->path) }}" class="rounded-lg shadow h-16 w-16 md:w-32 md:h-32 object-cover" />
+            @if ($diary->images->count())
+                <div class="flex flex-wrap gap-1 mt-5 justify-center">
+                    @foreach ($diary->images as $image)
+                        <div class="relative group">
+                            <img src="{{ asset($image->path) }}" class="rounded-lg shadow h-16 w-16 md:w-32 md:h-32 object-cover" />
 
-                        <!-- Botón borrar -->
-                        <span class="absolute top-2 right-2 opacity-80">
-                            <button class="text-xs p-1 bg-red-700 hover:bg-red-500 rounded-full" wire:click="deleteImage('{{ $image->path }}')" >
-                                ✕
-                            </button>
-                        </span>
-                    </div>
-                @endforeach
-            </div>
+                            <!-- Botón borrar -->
+                            <span class="absolute top-2 right-2 opacity-80">
+                                <button class="text-xs p-1 bg-red-700 hover:bg-red-500 rounded-full" wire:click="deleteImage('{{ $image->path }}')" >
+                                    ✕
+                                </button>
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
     </div>

@@ -65,6 +65,11 @@ class BookCreate extends Component
     public $selected_book_subjects = [];
     public $selected_book_collections = [];
 
+    public $author_name;
+    public $collections_name;
+    public $genres_name;
+    public $tags_name;
+
     public $book_api = '';
     // reglas de validacion
     protected function rules(){
@@ -81,6 +86,9 @@ class BookCreate extends Component
             'summary' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
+
+            'start_read' => ['nullable', 'date'],
+            'end_read' => ['nullable', 'date'],
             
             'language' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
@@ -94,6 +102,11 @@ class BookCreate extends Component
 
             'uuid' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('books', 'uuid')->ignore($this->book?->id ?? 0)],
             'user_id' => ['required', 'exists:users,id'],
+
+            'author_name' => ['nullable', 'string', 'max:255'],
+            'collections_name' => ['nullable', 'string', 'max:255'],
+            'genres_name' => ['nullable', 'string', 'max:255'],
+            'tags_name' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -111,6 +124,9 @@ class BookCreate extends Component
         'summary' => 'resumen personal',
         'notes' => 'notas',
         'is_favorite' => 'favorito',
+
+        'start_read' => 'inicio de lectura',
+        'end_read' => 'fin de lectura',
         
         'language' => 'idioma',
         'category' => 'categoria',
@@ -126,20 +142,6 @@ class BookCreate extends Component
         'user_id' => 'usuario',
     ];
 
-    // recibe llamada al componente y activa la funcion generate de api
-    // #[On('book-create')]
-    // public function generate($book){
-
-    //     $this->title = $book['title'] ?? null;
-    //     $this->release_date = $book['published_date'] ?? null;
-    //     $this->pages = $book['pages'] ?? null;
-    //     $this->cover_image_url = $book['thumbnail'] ?? null;
-    //     $this->synopsis = $book['description'] ?? null;
-        
-    //     \Flux\Flux::modal('create-book')->show();
-    // }
-
-
     // funcion para crear item
     public function save(){
         // datos automaticos
@@ -149,14 +151,55 @@ class BookCreate extends Component
         $this->rating = $this->rating == '' ? 0 : $this->rating;
         $this->number_collection = $this->number_collection == '' ? 1 : $this->number_collection;
         $this->is_favorite = $this->is_favorite == true ? 1 : 0;
+        $this->release_date = \Carbon\Carbon::parse($this->release_date.'-01-01');
         
+        if(!$this->selected_book_subjects && $this->subject_name != ''){
+            $author_created = Subject::firstOrCreate([
+                'name' => $this->author_name,
+                'slug' => \Illuminate\Support\Str::slug($this->author_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_subjects = [$author_created->id];
+        }
+        
+        if(!$this->selected_book_collections && $this->collections_name != ''){
+            $collections_created = Collection::firstOrCreate([
+                'name' => $this->collections_name,
+                'slug' => \Illuminate\Support\Str::slug($this->collections_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_collections = [$collections_created->id];
+        }
+        
+        if(!$this->selected_book_genres && $this->genres_name != ''){
+            $genres_created = Genre::firstOrCreate([
+                'name' => $this->genres_name,
+                'slug' => \Illuminate\Support\Str::slug($this->genres_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_genres = [$genres_created->id];
+        }
+        
+        if(!$this->selected_book_tags && $this->tags_name != ''){
+            $tags_created = Tag::firstOrCreate([
+                'name' => $this->tags_name,
+                'slug' => \Illuminate\Support\Str::slug($this->tags_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_tags = [$tags_created->id];
+        }
+
         // validacion
         $validated_data = $this->validate();
 
-        $this->validate([
-            'start_read' => ['required', 'date'],
-            'end_read' => ['nullable', 'date'],
-        ]);
+        // $this->validate([
+        //     'start_read' => ['required', 'date'],
+        //     'end_read' => ['nullable', 'date'],
+        // ]);
 
         // crear dato
         $book = Book::create($validated_data);
@@ -171,7 +214,7 @@ class BookCreate extends Component
             'user_id' => Auth::id(),
             'book_id' => $book->id,
             'start_read' => $this->start_read,
-            'end_read' => $this->end_read ?? '',
+            'end_read' => $this->end_read,
         ]);
 
         // resetear propiedades

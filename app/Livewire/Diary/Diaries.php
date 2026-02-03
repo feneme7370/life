@@ -18,7 +18,7 @@ class Diaries extends Component
     public $search = '';
     public $sortField = 'day';
     public $sortDirection = 'desc';
-    public $perPage = 30;
+    public $perPage = 500;
 
     // propiedades del item
     public $diaryId;

@@ -63,6 +63,11 @@ class BookEdit extends Component
     public $selected_book_subjects = [];
     public $selected_book_collections = [];
 
+    public $author_name;
+    public $collections_name;
+    public $genres_name;
+    public $tags_name;
+
     // reglas de validacion
     protected function rules(){
         return [
@@ -78,6 +83,9 @@ class BookEdit extends Component
             'summary' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
+
+            'start_read' => ['nullable', 'date'],
+            'end_read' => ['nullable', 'date'],
             
             'language' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
@@ -91,6 +99,11 @@ class BookEdit extends Component
 
             'uuid' => ['required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('books', 'uuid')->ignore($this->book?->id ?? 0)],
             'user_id' => ['required', 'exists:users,id'],
+
+            'author_name' => ['nullable', 'string', 'max:255'],
+            'collections_name' => ['nullable', 'string', 'max:255'],
+            'genres_name' => ['nullable', 'string', 'max:255'],
+            'tags_name' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -108,6 +121,9 @@ class BookEdit extends Component
         'summary' => 'resumen personal',
         'notes' => 'notas',
         'is_favorite' => 'favorito',
+
+        'start_read' => 'inicio de lectura',
+        'end_read' => 'fin de lectura',
         
         'language' => 'idioma',
         'category' => 'categoria',
@@ -172,6 +188,46 @@ class BookEdit extends Component
         // Limpiamos espacios y etiquetas vacías
         $this->summary = (trim(strip_tags($this->summary))) === '' ? null : $this->summary;
         $this->notes = (trim(strip_tags($this->notes))) === '' ? null : $this->notes;
+        
+        if(!$this->selected_book_subjects && $this->subject_name != ''){
+            $author_created = Subject::firstOrCreate([
+                'name' => $this->author_name,
+                'slug' => \Illuminate\Support\Str::slug($this->author_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_subjects = [$author_created->id];
+        }
+        
+        if(!$this->selected_book_collections && $this->collections_name != ''){
+            $collections_created = Collection::firstOrCreate([
+                'name' => $this->collections_name,
+                'slug' => \Illuminate\Support\Str::slug($this->collections_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_collections = [$collections_created->id];
+        }
+        
+        if(!$this->selected_book_genres && $this->genres_name != ''){
+            $genres_created = Genre::firstOrCreate([
+                'name' => $this->genres_name,
+                'slug' => \Illuminate\Support\Str::slug($this->genres_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_genres = [$genres_created->id];
+        }
+        
+        if(!$this->selected_book_tags && $this->tags_name != ''){
+            $tags_created = Tag::firstOrCreate([
+                'name' => $this->tags_name,
+                'slug' => \Illuminate\Support\Str::slug($this->tags_name . '-' . \Illuminate\Support\Str::random(4)),
+                'uuid' => \Illuminate\Support\Str::random(24),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            ]);
+            $this->selected_book_tags = [$tags_created->id];
+        }
         
         // validacion
         $validated_data = $this->validate();

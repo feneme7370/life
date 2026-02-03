@@ -4,6 +4,7 @@
     'selected' => [], // Elementos seleccionados (IDs)
     'label' => 'Seleccionar', // Etiqueta del campo
     'items' => [], // Etiqueta del campo
+    'wire_model' => '', // Etiqueta del campo
 ])
 
 @php
@@ -12,7 +13,7 @@
 
 <div x-data="{ selected: @entangle($attributes->wire('model')), allItems: @js($items), search: '' }">
 
-    <flux:input label="{{ $label }}" x-model="search" placeholder="Buscar..." />
+    <flux:input label="{{ $label }}" wire:model="{{ $wire_model }}" x-model="search" placeholder="Buscar..." />
 
     <!-- Lista de opciones -->
     <ul class="p-2 max-h-40 overflow-y-auto text-sm">
