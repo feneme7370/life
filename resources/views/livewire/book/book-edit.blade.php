@@ -14,7 +14,7 @@
             <flux:textarea wire:model='synopsis' label="Sinopsis" placeholder="Coloque una sinopsis" resize="vertical"/>
             
             <div class="grid gap-1 grid-cols-3">
-                <flux:input wire:model='release_date' type="date" max="2999-12-31" label="Publicacion" />
+                <flux:input wire:model='release_date' type="number" min="1" max="2999" label="Publicacion" />
                 <flux:input wire:model='pages' label="Paginas" placeholder="Cantidad" />
                 <flux:select wire:model="category" label="Categoria" placeholder="Seleccionar...">
                     @foreach ($category_book as $key => $value)
@@ -51,7 +51,7 @@
                     wire:model="selected_book_subjects" 
                     label="Sujetos"
                     :items="$subjects"
-                    wire_model="subjects_name"
+                    wire_model="author_name"
                 />
             </div>
 
@@ -90,17 +90,41 @@
                 />
             </div>
 
+            <div class="flex gap-2 items-center">
+
+                <flux:button wire:click="modalRead" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button>
+                <flux:separator text="Lecturas" />
+                
+            </div>
+
+            @if ($book->reads)
+                @foreach ($book->reads as $read)
+                <div class="flex items-start justify-between">
+                    <div class="px-3 border-l-4 border-purple-800">
+                        @if ($read->end_read)
+                            <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300 ">{{ $read->start_read }} - {{ $read->end_read }} en {{ \Carbon\Carbon::parse($read->start_read)->diffInDays($read->end_read) }} dias</p>
+                        @else
+                            <p class="mb-2 text-xs sm:text-base text-gray-800 dark:text-gray-300 ">{{ $read->start_read }} - {{ $read->end_read }} Leyendo</p>
+                        @endif
+
+                    </div>
+
+                    <flux:button wire:click="deleteRead({{ $read->id }})" class="ml-3 text-gray-400 hover:text-red-500 transition" size="sm" variant="ghost" color="purple" type="submit">✕</flux:button>
+                </div>
+                @endforeach
+            @endif
+
             <flux:text class="text-xs italic">Personal</flux:text>
 
             {{-- <flux:textarea wire:model='summary' label="Resumen personal" placeholder="Coloque un resumen" resize="vertical"/> --}}
             {{-- <flux:textarea wire:model='notes' label="Notas" placeholder="Coloque las notas" resize="vertical"/> --}}
 
             <x-pages.forms.quill-textarea-form 
-            id_quill="editor_create_summary" 
-            name="summary"
-            rows="15" 
-            placeholder="{{ __('Resumen personal') }}" model="summary"
-            model_data="{{ $summary }}" 
+                id_quill="editor_create_summary" 
+                name="summary"
+                rows="15" 
+                placeholder="{{ __('Resumen personal') }}" model="summary"
+                model_data="{{ $summary }}" 
             />
             
             <x-pages.forms.quill-textarea-form 
@@ -143,4 +167,55 @@
                 <flux:button size="sm" variant="primary" color="purple" icon="plus" wire:click='update' type="submit">Actualizar</flux:button>
             </div>
         </div>
+
+
+    {{-- modales para agrear y eliminar lecturas --}}
+    <flux:modal name="add-read" class="md:w-96">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Lectura</flux:heading>
+                <flux:text class="mt-2">Agregue una fecha de lectura.</flux:text>
+            </div>
+
+            {{-- <flux:textarea wire:model='quoteContent' row="20" label="Cita o Frase" placeholder="Coloque la la cita o frase" resize="vertical"/> --}}
+            <div class="grid grid-cols-2 gap-1">
+                <flux:input wire:model='start_read' type="date" max="2999-12-31" label="Inicio de lectura" />
+                <flux:input wire:model='end_read' type="date" max="2999-12-31" label="Fin de lectura" />
+            </div>
+
+            <div class="flex gap-2">
+                <flux:spacer />
+
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancelar</flux:button>
+                </flux:modal.close>
+
+                <flux:button wire:click="addRead" type="submit" variant="primary">Agregar</flux:button>
+            </div>
+        </div>
+    </flux:modal>
+
+
+    <flux:modal name="delete-read" class="min-w-[22rem]">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Eliminar</flux:heading>
+
+                <flux:text class="mt-2">
+                    <p>Desea eliminar esta lectura?.</p>
+                    <p>Esta accion no puede revertirse.</p>
+                </flux:text>
+            </div>
+
+            <div class="flex gap-2">
+                <flux:spacer />
+
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancelar</flux:button>
+                </flux:modal.close>
+
+                <flux:button wire:click="destroyRead" type="submit" variant="danger">Borrar</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>

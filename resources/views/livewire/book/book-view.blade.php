@@ -144,7 +144,7 @@
 
             <div class="flex gap-2 items-center">
 
-                <flux:button wire:click="modalRead" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button>
+                {{-- <flux:button wire:click="modalRead" class="mt-1" size="sm" variant="ghost" color="purple" icon="plus" type="submit"></flux:button> --}}
                 <flux:separator text="Lecturas" />
                 
             </div>
@@ -161,7 +161,7 @@
 
                     </div>
 
-                    <flux:button wire:click="deleteRead({{ $read->id }})" class="ml-3 text-gray-400 hover:text-red-500 transition" size="sm" variant="ghost" color="purple" type="submit">✕</flux:button>
+                    {{-- <flux:button wire:click="deleteRead({{ $read->id }})" class="ml-3 text-gray-400 hover:text-red-500 transition" size="sm" variant="ghost" color="purple" type="submit">✕</flux:button> --}}
                 </div>
                 @endforeach
             @endif
@@ -188,11 +188,13 @@
                     </p>
                 @endif
             </div>
-
+{{-- 
             @if ($book->summary)
-            <p class="mt-4 sm:mt-0 mb-4 text-xl sm:text-2xl font-bold text-gray-950 dark:text-gray-200 ">Resumen personal</p>
-            <p class="mb-4 text-sm sm:text-base text-gray-800 dark:text-gray-300  whitespace-pre-wrap">{!! $book->summary !!}</p>
-            @endif
+            <div class="overflow-scroll">
+                <p class="mt-4 sm:mt-0 mb-4 text-xl sm:text-2xl font-bold text-gray-950 dark:text-gray-200 ">Resumen personal</p>
+                <p class="mb-4 text-sm sm:text-base text-gray-800 dark:text-gray-300 whitespace-pre-wrap">{!! $book->summary !!}</p>
+            </div>
+            @endif --}}
 
             @if ($book->notes)
             <p class="mt-4 sm:mt-0 mb-4 text-xl sm:text-2xl font-bold text-gray-950 dark:text-gray-200 ">Notas personales</p>

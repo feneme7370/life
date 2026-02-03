@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Subject;
 use Livewire\Component;
+use App\Models\BookRead;
 use App\Models\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -68,6 +69,11 @@ class BookEdit extends Component
     public $genres_name;
     public $tags_name;
 
+    // add reads
+    public $start_read;
+    public $end_read;
+    public $reads, $readId;
+
     // reglas de validacion
     protected function rules(){
         return [
@@ -84,8 +90,8 @@ class BookEdit extends Component
             'notes' => ['nullable', 'string'],
             'is_favorite' => ['nullable', 'numeric', 'min:0', 'max:1'],
 
-            'start_read' => ['nullable', 'date'],
-            'end_read' => ['nullable', 'date'],
+            // 'start_read' => ['nullable', 'date'],
+            // 'end_read' => ['nullable', 'date'],
             
             'language' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'category' => ['nullable', 'numeric', 'min:0', 'max:10'],
@@ -176,6 +182,58 @@ class BookEdit extends Component
         // \Flux\Flux::modal('edit-book')->show();
     }
 
+    // abrir modal de nota
+    public function modalRead(){
+        $this->start_read = null;
+        $this->end_read = null;
+        $this->modal('add-read')->show();
+    }
+    // agregar lectura
+    public function addRead(){
+
+        $this->validate([
+            'start_read' => ['required', 'date'],
+            'end_read' => ['nullable', 'date'],
+        ]);
+
+        BookRead::create([
+            'user_id' => Auth::id(),
+            'book_id' => $this->book->id,
+            'start_read' => $this->start_read,
+            'end_read' => $this->end_read,
+        ]);
+
+        $this->reads = BookRead::where('book_id', $this->book->id)->get();
+        $this->start_read = '';
+        $this->end_read = '';
+
+        $this->modal('add-read')->close();
+
+        session()->flash('success', 'Lectura agregada');
+    }
+
+    // modal para borrar nota
+    public function deleteRead($id){
+        $this->readId = $id;
+   
+        $this->modal('delete-read')->show();
+        // \Flux\Flux::modal('delete-quote')->show();
+
+    }
+    // borrar nota
+    public function destroyRead(){
+        
+        BookRead::find($this->readId)->delete();
+
+        $this->modal('delete-read')->close();
+        // \Flux\Flux::modal('delete-quote')->close();
+
+        $this->reads = BookRead::where('book_id', $this->book->id)->get();
+        $this->readId = '';
+
+        session()->flash('success', 'Lecura eliminada');
+    }
+
     // funcion para editar item
     public function update(){
         // datos automaticos
@@ -184,12 +242,13 @@ class BookEdit extends Component
         $this->number_collection = $this->number_collection == '' ? 1 : $this->number_collection;
         $this->is_favorite = $this->is_favorite == true ? 1 : 0;
         $this->status = $this->status == true ? 5 : 0;
+        $this->release_date = \Carbon\Carbon::parse($this->release_date.'-01-01');
         
         // Limpiamos espacios y etiquetas vacías
         $this->summary = (trim(strip_tags($this->summary))) === '' ? null : $this->summary;
         $this->notes = (trim(strip_tags($this->notes))) === '' ? null : $this->notes;
         
-        if(!$this->selected_book_subjects && $this->subject_name != ''){
+        if(!$this->selected_book_subjects && $this->author_name != ''){
             $author_created = Subject::firstOrCreate([
                 'name' => $this->author_name,
                 'slug' => \Illuminate\Support\Str::slug($this->author_name . '-' . \Illuminate\Support\Str::random(4)),
