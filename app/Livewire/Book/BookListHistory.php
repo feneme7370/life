@@ -32,7 +32,7 @@ class BookListHistory extends Component
     $language_book;
 
     // mostrar elementos al hacer click
-    public $list_all_data = 'completa';
+    public $list_all_data = 'redes';
 
     // refrescar paginacion
     public function updatingSearch(){$this->resetPage();}
@@ -63,7 +63,12 @@ class BookListHistory extends Component
         $this->language_book = Book::language_book();
 
         $books = Book::where('user_id', Auth::id())
-            ->orderBy($this->sortField, $this->sortDirection)
+            ->whereHas('reads')
+            ->withMax('reads', 'end_read')
+            ->whereHas('reads', fn($q) => $q->where('end_read', '<>' ,''))
+
+            // ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy('reads_max_end_read', $this->sortDirection)
             ->paginate($this->perPage);
 
         return view('livewire.book.book-list-history', compact(

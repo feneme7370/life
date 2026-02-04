@@ -153,7 +153,7 @@ class BookEdit extends Component
         $this->original_title = $this->book->original_title; 
 
         $this->synopsis = $this->book->synopsis; 
-        $this->release_date = $this->book->release_date; 
+        $this->release_date = \Carbon\Carbon::parse($this->book->release_date)->format('Y'); 
         $this->number_collection = $this->book->number_collection; 
         $this->pages = $this->book->pages; 
 

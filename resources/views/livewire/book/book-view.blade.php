@@ -197,8 +197,10 @@
             @endif --}}
 
             @if ($book->notes)
-            <p class="mt-4 sm:mt-0 mb-4 text-xl sm:text-2xl font-bold text-gray-950 dark:text-gray-200 ">Notas personales</p>
-            <p class="mb-4 text-sm sm:text-base text-gray-800 dark:text-gray-300  whitespace-pre-wrap">{!! $book->notes !!}</p>
+            <div class="mb-4 text-sm sm:text-base text-gray-800 dark:text-gray-300 whitespace-pre-wrap break-words">
+                <p class="mt-4 sm:mt-0 mb-4 text-xl sm:text-2xl font-bold text-gray-950 dark:text-gray-200 ">Notas personales</p>
+                <p class="mb-4 text-sm sm:text-base text-gray-800 dark:text-gray-300">{!! $book->notes !!}</p>
+            </div>
             @endif
 
             <div class="flex gap-2 items-center">
