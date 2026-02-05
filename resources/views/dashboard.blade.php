@@ -2,8 +2,8 @@
 
     {{-- <livewire:dashboard.dashboard-index /> --}}
     
-    <div>
+    {{-- <div>
         <livewire:book.partials.book-static-genre />
-    </div>
+    </div> --}}
     
 </x-layouts.app>

@@ -68,22 +68,22 @@
 @endpush
 
 <style>
-.litepicker .day-item.is-highlighted
-/* .litepicker .day-item.is-selected  */
-{
-    background-color: #70157e !important; /* azul Tailwind-600 */
-    color: #fff !important;
-    border-radius: 40% !important; /* redondeado */
-}
+    .litepicker .day-item.is-highlighted
+    /* .litepicker .day-item.is-selected  */
+    {
+        background-color: #70157e !important; /* azul Tailwind-600 */
+        color: #fff !important;
+        border-radius: 40% !important; /* redondeado */
+    }
 
-.litepicker .day-item.is-inRange,
-.litepicker .day-item.is-start-date,
-.litepicker .day-item.is-end-date
-{
-    background-color: #40024a !important; /* azul Tailwind-600 */
-    color: #fff !important;
-    border-radius: 30% !important; /* redondeado */
-}
+    .litepicker .day-item.is-inRange,
+    .litepicker .day-item.is-start-date,
+    .litepicker .day-item.is-end-date
+    {
+        background-color: #40024a !important; /* azul Tailwind-600 */
+        color: #fff !important;
+        border-radius: 30% !important; /* redondeado */
+    }
 
 
 </style>
@@ -110,6 +110,8 @@
 
         </div>
 
+        <flux:button class="text-xs text-center" wire:click="export()">Excel</flux:button>
+
         {{-- tabla --}}
         <div class="">
             @foreach ($diaries as $diary)
@@ -122,6 +124,7 @@
                     <span class="line-clamp-3 text-xs">{!! $diary->content !!}</span>
                     
                         <div class="flex gap-1 justify-end items-center">
+                            <flux:button variant="ghost" color="blue" icon="document-duplicate" size="sm" wire:click="duplicate('{{ $diary->id}}')"></flux:button>
                             <a href="{{ route('diary_edit', ['uuid' => $diary->uuid]) }}">
                                 <flux:button variant="ghost" color="blue" icon="pencil-square" size="sm"></flux:button>
                             </a>

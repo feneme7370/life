@@ -7,6 +7,7 @@
     </div>
 
     <flux:icon.loading class="block w-full" wire:loading.delay />
+    <flux:button class="text-xs text-center" wire:click="export()">Excel</flux:button>
 
     <div class="p-1">
         <div class="flex justify-between items-center gap-1">

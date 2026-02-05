@@ -51,6 +51,17 @@ class Diaries extends Component
         // dd($this->highlightedDays);
     }
 
+    public function duplicate(Diary $diary){
+        Diary::create([
+            'day' => $diary->day,
+            'humor' => $diary->humor,
+            'title' => $diary->title . '(duplicado)',
+            'content' => $diary->content,
+            'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            'uuid' => \Illuminate\Support\Str::random(24),
+        ]);
+    }
+
     // abrir modal para editar
     public function edit($uuid){
         $this->dispatch('diary-edit', $uuid); // llama al modelo de livewire para editar
@@ -98,13 +109,18 @@ class Diaries extends Component
         $this->dayEnd = \Carbon\Carbon::parse('2100-01-01')->format('Y-m-d');
     }
 
-    // render de pagina
-    public function render()
+    public function export()
     {
+        $diaries = $this->diariesQuery()
+            ->get(); // 👈 sin paginación
 
-        $title = ['singular' => 'diario', 'plural' => 'diarios'];
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\DiariesExport($diaries), 'DiariesExport.xlsx');
 
-        $diaries = Diary::where('user_id', Auth::id())
+    }
+
+    protected function diariesQuery()
+    {
+        return Diary::where('user_id', Auth::id())
             ->where(function ($query) {
                 $query->where('title', 'like', "%{$this->search}%")
                       ->orWhere('content', 'like', "%{$this->search}%")
@@ -116,11 +132,18 @@ class Diaries extends Component
             ->when($this->dayEnd !== null, function( $query) {
                 return $query->where('day', '<=', $this->dayEnd);
             })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            ->orderBy($this->sortField, $this->sortDirection);
+    }
 
+    // render de pagina
+    public function render()
+    {
 
+        $title = ['singular' => 'diario', 'plural' => 'diarios'];
         $humor_status = Diary::humor_status();
+
+        $diaries = $this->diariesQuery()
+            ->paginate($this->perPage);
 
         return view('livewire.diary.diaries', compact(
             'title',

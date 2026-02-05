@@ -56,6 +56,26 @@ class Books extends Component
         session()->flash('success', 'Borrado correctamente');
         $this->redirectRoute('books', navigate:true);
     }
+    
+    public function export()
+    {
+        $books = $this->booksQuery()
+            ->get(); // 👈 sin paginación
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\BooksExport($books), 'BooksExport.xlsx');
+
+    }
+
+    protected function booksQuery()
+    {
+        return Book::where('user_id', Auth::id())
+            ->with(['book_subjects', 'book_tags', 'book_genres', 'book_collections', 'reads'])
+            ->where(function ($query) {
+                $query->where('title', 'like', "%{$this->search}%")
+                    ->orWhere('slug', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortField, $this->sortDirection);
+    }
 
     // render de pagina
     public function render()
@@ -69,12 +89,7 @@ class Books extends Component
         $format_book = Book::format_book();
         $category_book = Book::category_book();
 
-        $books = Book::where('user_id', Auth::id())
-            ->where(function ($query) {
-                $query->where('title', 'like', "%{$this->search}%")
-                      ->orWhere('slug', 'like', "%{$this->search}%");
-            })
-            ->orderBy($this->sortField, $this->sortDirection)
+        $books = $this->booksQuery()
             ->paginate($this->perPage);
 
         return view('livewire.book.books', compact(

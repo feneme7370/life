@@ -42,6 +42,13 @@ return [
             'synchronous' => null,
         ],
 
+        // para exportar a sqlite
+            'sqlite_migrate' => [
+            'driver' => 'sqlite',
+            'database' => env('DB_SQLITE_DATABASE'),
+            'prefix' => '',
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),

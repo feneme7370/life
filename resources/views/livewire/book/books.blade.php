@@ -15,7 +15,7 @@
 
     
     <flux:icon.loading class="block w-full" wire:loading.delay />
-
+    <flux:button class="text-xs text-center" wire:click="export()">Excel</flux:button>
     {{-- <livewire:subject.subject-create> --}}
 
     {{-- mensaje de success --}}
