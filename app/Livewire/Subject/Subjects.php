@@ -55,19 +55,44 @@ class Subjects extends Component
         $this->redirectRoute('subjects', navigate:true);
     }
 
-    // render de pagina
-    public function render()
+    public function export($table)
     {
-        $title = ['singular' => 'sujeto', 'plural' => 'sujetos'];
+        $data = \Illuminate\Support\Facades\DB::table($table)->where('user_id', Auth::id())->get();
 
-        $subjects = Subject::where('user_id', Auth::id())
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
+    }
+
+    public function exportAsociation($table)
+    {
+        $data = \Illuminate\Support\Facades\DB::table($table)->get();
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
+    }
+
+    protected function booksQuery()
+    {
+        return Subject::where('user_id', Auth::id())
             ->select('id', 'name', 'slug', 'country', 'birthdate', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%")
                       ->orWhere('country', 'like', "%{$this->search}%");
             })
-            ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy($this->sortField, $this->sortDirection);
+    }
+
+    // render de pagina
+    public function render()
+    {
+        $title = ['singular' => 'sujeto', 'plural' => 'sujetos'];
+
+        $subjects = $this->booksQuery()
             ->paginate($this->perPage);
 
         return view('livewire.subject.subjects', compact(

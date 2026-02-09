@@ -11,11 +11,12 @@
         <a href="{{ route('book_create') }}">
             <flux:button size="sm" variant="ghost" color="purple" icon="plus" size="sm">Nuevo</flux:button>
         </a>
+        <flux:button class="text-xs text-center" wire:click="export('books')">Excel</flux:button>
+        <flux:button class="text-xs text-center" wire:click="export('book_reads')">ExcelReads</flux:button>
     {{-- </flux:modal.trigger> --}}
 
     
     <flux:icon.loading class="block w-full" wire:loading.delay />
-    <flux:button class="text-xs text-center" wire:click="export()">Excel</flux:button>
     {{-- <livewire:subject.subject-create> --}}
 
     {{-- mensaje de success --}}

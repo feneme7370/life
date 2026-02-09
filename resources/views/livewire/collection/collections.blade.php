@@ -10,10 +10,12 @@
     <flux:modal.trigger name="create-collection">
         <flux:button >Nuevo</flux:button>
     </flux:modal.trigger>
+    <flux:button class="text-xs text-center" wire:click="export('collections')">Excel</flux:button>
+        <flux:button class="text-xs text-center" wire:click="exportAsociation('book_collection')">ExcelAsociation</flux:button>
 
     {{-- modales de crear y editar --}}
-    <livewire:collection.collection-create>
-    <livewire:collection.collection-edit>
+    <livewire:collection.collection-create />
+    <livewire:collection.collection-edit />
 
     {{-- mensaje de success --}}
     @session('success')

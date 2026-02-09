@@ -37,11 +37,6 @@ class Books extends Component
         $this->sortField = $field;
     }
 
-    // abrir modal para editar
-    // public function edit($uuid){
-    //     $this->dispatch('book-edit', $uuid); // llama al modelo de livewire para editar
-    // }
-
     // abrir modal para eliminar
     public function delete($uuid){
         $this->bookId = Book::where('uuid', $uuid)->first()->id;
@@ -57,13 +52,24 @@ class Books extends Component
         $this->redirectRoute('books', navigate:true);
     }
     
-    public function export()
+    public function export($table)
     {
-        $books = $this->booksQuery()
-            ->get(); // 👈 sin paginación
+        $data = \Illuminate\Support\Facades\DB::table($table)->where('user_id', Auth::id())->get();
 
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\BooksExport($books), 'BooksExport.xlsx');
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
+    }
 
+    public function exportAsociation($table)
+    {
+        $data = \Illuminate\Support\Facades\DB::table($table)->get();
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
     }
 
     protected function booksQuery()

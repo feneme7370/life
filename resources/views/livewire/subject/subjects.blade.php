@@ -11,9 +11,12 @@
         <flux:button >Nuevo</flux:button>
     </flux:modal.trigger>
 
+    <flux:button class="text-xs text-center" wire:click="export('subjects')">Excel</flux:button>
+    <flux:button class="text-xs text-center" wire:click="exportAsociation('book_subject')">ExcelAsociation</flux:button>
+
     {{-- modales de crear y editar --}}
-    <livewire:subject.subject-create>
-    <livewire:subject.subject-edit>
+    <livewire:subject.subject-create />
+    <livewire:subject.subject-edit />
 
     {{-- mensaje de success --}}
     @session('success')

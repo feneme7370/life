@@ -56,18 +56,43 @@ class Genres extends Component
         $this->redirectRoute('genres', navigate:true);
     }
 
-    // render de pagina
-    public function render()
+    public function export($table)
     {
-        $title = ['singular' => 'genero', 'plural' => 'generos'];
+        $data = \Illuminate\Support\Facades\DB::table($table)->where('user_id', Auth::id())->get();
 
-        $genres = Genre::where('user_id', Auth::id())
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
+    }
+
+    public function exportAsociation($table)
+    {
+        $data = \Illuminate\Support\Facades\DB::table($table)->get();
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\GenericExport($data, $table),
+            "{$table}.xlsx"
+        );
+    }
+
+    protected function booksQuery()
+    {
+        return Genre::where('user_id', Auth::id())
             ->select('id', 'name', 'slug', 'cover_image_url', 'uuid')            
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                       ->orWhere('slug', 'like', "%{$this->search}%");
             })
-            ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy($this->sortField, $this->sortDirection);
+    }
+
+    // render de pagina
+    public function render()
+    {
+        $title = ['singular' => 'genero', 'plural' => 'generos'];
+
+        $genres = $this->booksQuery()
             ->paginate($this->perPage);
 
         return view('livewire.genre.genres', compact(

@@ -10,10 +10,12 @@
     <flux:modal.trigger name="create-tag">
         <flux:button >Nuevo</flux:button>
     </flux:modal.trigger>
+    <flux:button class="text-xs text-center" wire:click="export('tags')">Excel</flux:button>
+        <flux:button class="text-xs text-center" wire:click="exportAsociation('book_tag')">ExcelAsociation</flux:button>
 
     {{-- modales de crear y editar --}}
-    <livewire:tag.tag-create>
-    <livewire:tag.tag-edit>
+    <livewire:tag.tag-create />
+    <livewire:tag.tag-edit />
 
     {{-- mensaje de success --}}
     @session('success')

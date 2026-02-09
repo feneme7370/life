@@ -113,7 +113,6 @@
             {{-- static language --}}
             <div>
                 <flux:heading>Idiomas ({{ collect($filteredBooks)->groupBy('language')->count() }})</flux:heading>
-    
                 @foreach ((collect($filteredBooks)->groupBy('language')->map->count()) as $language => $count)
                     <flux:text class="mt-2">
                         <a
@@ -128,7 +127,6 @@
             {{-- static format --}}
             <div>
                 <flux:heading>Formato ({{ collect($filteredBooks)->groupBy('format')->count() }})</flux:heading>
-    
                 @foreach ((collect($filteredBooks)->groupBy('format')->map->count()) as $format => $count)
                     <flux:text class="mt-2">
                         <a
@@ -137,7 +135,6 @@
                         >{{ $format_book[$format]}} ({{ $count }})</a>
                     </flux:text>
                 @endforeach
-                
             </div>
     
         </div>
@@ -147,7 +144,6 @@
             {{-- static list titles --}}
             <div>
                 <flux:heading>Leidos ({{ $filteredBooks->count() }})</flux:heading>
-    
                 @foreach($bookStats as $book)
                     <flux:text class="mt-2">
                         <a
@@ -156,13 +152,11 @@
                         >📖 {{ $book['title'] }}</a>
                     </flux:text>
                 @endforeach
-                
             </div>
 
             {{-- static authors --}}
             <div>
                 <flux:heading>Autores ({{ $authorStats->count() }})</flux:heading>
-    
                 @foreach($authorStats as $author)
                     <flux:text class="mt-2">
                         <a
@@ -171,7 +165,6 @@
                         >🖊️ {{ $author['name'] }} ({{ $author['count'] }})</a>
                     </flux:text>
                 @endforeach
-                
             </div>
     
         </div>
@@ -184,14 +177,12 @@
         <flux:heading>Pendientes de comentar ({{ $pendingComments->count() }})</flux:heading>
 
         @foreach($pendingComments as $book)
-            {{-- @if (!$book->notes) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            {{-- @endif --}}
         @endforeach
         
     </div>
@@ -200,22 +191,17 @@
     {{-- static list pend reads --}}
     <div>
         <flux:heading>Abandonados ({{ $abandonatedBooks->count() }})</flux:heading>
-
         @foreach($abandonatedBooks as $book)
-            {{-- @if ( $book->status === 5) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            {{-- @endif --}}
         @endforeach
-        
     </div>
 
-        <flux:separator text="📊 Grafico por mes" />
-
+    <flux:separator text="📊 Grafico por mes" />
     <div>
         @foreach ($filteredBooksMonths as $key => $month)
             <p>
@@ -228,18 +214,14 @@
     {{-- static list pend reads --}}
     <div>
         <flux:heading>Pendientes de leer ({{ $pendingBooks->count() }})</flux:heading>
-
         @foreach($pendingBooks as $book)
-            {{-- @if (!$book->reads->count()) --}}
                 <flux:text class="mt-2">
                     <a
                         class="hover:underline" 
                         href="{{ route('book_view', ['uuid' => $book['uuid']]) }}"
                     >🗒️ {{ $book['title'] }}</a>
                 </flux:text>
-            {{-- @endif --}}
         @endforeach
-        
     </div>
 
 </div>
