@@ -11,6 +11,9 @@ class Books extends Component
 {
     // paginacion
     use WithPagination;
+    use \Livewire\WithFileUploads;
+
+    public $file;
 
     // propiedades para paginacion y orden
     public $search = '';
@@ -70,6 +73,17 @@ class Books extends Component
             new \App\Exports\GenericExport($data, $table),
             "{$table}.xlsx"
         );
+    }
+
+    public function importAssociation(string $table)
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\GenericImport($table), $this->file);
+
+        session()->flash('success', 'Importación realizada correctamente');
     }
 
     protected function booksQuery()

@@ -13,6 +13,16 @@
         </a>
         <flux:button class="text-xs text-center" wire:click="export('books')">Excel</flux:button>
         <flux:button class="text-xs text-center" wire:click="export('book_reads')">ExcelReads</flux:button>
+
+        <div>
+            <input type="file" wire:model="file" />
+            <flux:button
+                class="text-xs text-center"
+                wire:click="importAssociation('books')"
+            >
+                ImportExcel
+            </flux:button>
+        </div>
     {{-- </flux:modal.trigger> --}}
 
     

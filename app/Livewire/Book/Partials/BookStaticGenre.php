@@ -128,7 +128,7 @@ class BookStaticGenre extends Component
             })
             ->countBy()
             ->union($months) // completa los que faltan
-        ->sortKeys();    // ordena de 01 a 12;
+            ->sortKeys();    // ordena de 01 a 12;
 
         // libros leidos
         $this->bookStats = $filteredBooks->map(function ($book) {

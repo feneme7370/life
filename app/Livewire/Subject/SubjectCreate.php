@@ -68,7 +68,7 @@ class SubjectCreate extends Component
         $validated_data = $this->validate();
 
         // crear dato
-        Subject::create($validated_data);
+        \App\Models\Page\Subject::create($validated_data);
 
         // resetear propiedades
         $this->reset();

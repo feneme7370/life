@@ -24,6 +24,7 @@ class BookLibraryExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             'Titulo',
+            'Slug',
             'Título Original',
             'Autor(es)',
             'Genero(s)',
@@ -38,6 +39,8 @@ class BookLibraryExport implements FromCollection, WithHeadings, WithMapping
             'Fecha de lectura',
             'Imagen URL',
             'Sinopsis',
+            'Resumen',
+            'Resumen limpio',
             'Notas',
             'Notas limpias',
         ];
@@ -47,6 +50,7 @@ class BookLibraryExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             $book->title,
+            $book->slug,
             $book->original_title,
             $book->book_subjects->pluck('name')->join(', '),
             $book->book_genres->pluck('name')->join(', '),
@@ -54,9 +58,9 @@ class BookLibraryExport implements FromCollection, WithHeadings, WithMapping
             $book->book_collections->pluck('name')->join(', '),
             $book->number_collection,
             $book->release_date,
-            $book->is_favorite ? 'Si' : 'No',
+            $book->is_favorite ? '1' : '0',
             $book->rating,
-            $book->status == 5 ? 'Si' : 'No',
+            $book->status == 5 ? '1' : '0',
             $book->pages,
             $book->reads
                 ->map(function ($read) {
@@ -66,14 +70,16 @@ class BookLibraryExport implements FromCollection, WithHeadings, WithMapping
 
                     $end = $read->end_read
                         ? \Carbon\Carbon::parse($read->end_read)->format('d/m/Y')
-                        : '';
+                        : 'En progreso';
 
-                    return trim($start . ($start && $end ? ' - ' : '') . $end);
+                    return trim($start . ' → ' . $end);
                 })
                 ->filter()
                 ->join(' | '),
             $book->cover_image_url,
             $book->synopsis,
+            $book->summary,
+            $this->cleanNotes($book->summary),
             $book->notes,
             $this->cleanNotes($book->notes),
         ];

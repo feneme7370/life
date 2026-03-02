@@ -100,10 +100,6 @@
             </div>
 
             <flux:text class="text-xs italic">Personal</flux:text>
-
-            {{-- <flux:textarea wire:model='summary' label="Resumen personal" placeholder="Coloque un resumen" resize="vertical"/>
-            <flux:textarea wire:model='notes' label="Notas" placeholder="Coloque las notas" resize="vertical"/> --}}
-
             
             <x-pages.forms.quill-textarea-form 
             id_quill="editor_create_summary" 

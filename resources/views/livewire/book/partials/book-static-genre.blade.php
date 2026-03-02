@@ -210,8 +210,8 @@
         @endforeach
     </div>
 
+    {{-- pendientes de todos los años a leer --}}
     <flux:separator text="📖 Pendientes totales a leer" />
-    {{-- static list pend reads --}}
     <div>
         <flux:heading>Pendientes de leer ({{ $pendingBooks->count() }})</flux:heading>
         @foreach($pendingBooks as $book)
